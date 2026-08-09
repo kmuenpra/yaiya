@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prototype · Miang Kham — Interactive Anatomy</title>
+  <meta name="description" content="Interactive prototype: a slowly rotating Miang Kham that opens to reveal its eight ingredients and their health benefits." />
+  <link rel="icon" href="assets/img/Yaiya_logo.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Chonburi&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    /* ===== Miang Kham interactive prototype (scoped: mk-*) ===== */
+    .mk-section { padding: 3rem 0 4rem; }
+    .mk-proto-tag { display:inline-block; padding:.25rem .7rem; border:1px solid var(--gold); border-radius:999px;
+      font-size:var(--t-xs); letter-spacing:.18em; text-transform:uppercase; color:var(--palm-deep); margin-bottom:1rem; }
+    .mk-layout { display:grid; grid-template-columns: 1.35fr .9fr; gap:2.2rem; align-items:center; }
+    @media (max-width: 880px){ .mk-layout{ grid-template-columns:1fr; gap:1.6rem; } }
+
+    /* Stage holds the platter (revealed) + the spinning closed lid on top */
+    .mk-stage { position:relative; width:100%; border-radius:18px; overflow:hidden;
+      box-shadow: var(--shadow-md, 0 18px 50px rgba(30,61,44,.18)); background:#0e0e0e; cursor:pointer;
+      outline-offset:4px; }
+    .mk-platter { display:block; width:100%; height:auto; transition: filter .5s ease, transform 6s linear; }
+    .mk-stage:not(.is-open) .mk-platter { filter: brightness(.6) saturate(.85) blur(1px); transform: scale(1.04); }
+    .mk-stage.is-open .mk-platter { filter:none; transform:scale(1); }
+
+    /* The closed "product" — a kraft lid that slowly spins, lifts away on open */
+    .mk-lid { position:absolute; inset:0; display:grid; place-items:center; transition: opacity .5s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+    .mk-stage.is-open .mk-lid { opacity:0; transform: translateY(-10%) scale(1.12); pointer-events:none; }
+    .mk-disc { width:min(58%, 280px); aspect-ratio:1; border-radius:50%;
+      background:
+        radial-gradient(circle at 38% 32%, rgba(255,255,255,.35), transparent 45%),
+        repeating-conic-gradient(from 0deg, #c89a64 0deg 6deg, #c19258 6deg 12deg),
+        radial-gradient(circle, #cda06a, #b07d44);
+      box-shadow: inset 0 0 0 10px rgba(58,46,30,.35), inset 0 0 40px rgba(58,46,30,.45), 0 14px 34px rgba(0,0,0,.4);
+      display:grid; place-items:center; animation: mk-spin 22s linear infinite; will-change:transform; }
+    .mk-disc img { width:46%; opacity:.9; filter: grayscale(.1); }
+    .mk-box-scene { width:min(62%,280px); aspect-ratio:1; perspective:1100px; }
+    .mk-box-body { width:100%; height:100%; border-radius:50%; position:relative; background:#9c6a34;
+      transform: rotateX(34deg); transform-origin:center 58%;
+      box-shadow: 0 6px 0 #b8814a,0 12px 0 #a9743d,0 18px 0 #966733,0 24px 0 #855a2b,0 33px 30px rgba(0,0,0,.5); }
+    .mk-box-lid { position:absolute; inset:0; border-radius:50%; background:center/cover no-repeat;
+      animation: mk-spin 22s linear infinite; will-change:transform; }
+    @keyframes mk-spin { to { transform: rotate(360deg); } }
+
+    .mk-prompt { position:absolute; left:50%; bottom:7%; transform:translateX(-50%); z-index:2;
+      background: rgba(247,241,225,.92); color:var(--betel); padding:.5rem 1rem; border-radius:999px;
+      font-size:var(--t-sm); font-weight:600; letter-spacing:.02em; box-shadow:var(--shadow-sm); transition:opacity .4s ease; }
+    .mk-prompt .th { font-family:var(--f-thai); margin-right:.4rem; color:var(--palm-deep); }
+    .mk-stage.is-open .mk-prompt { opacity:0; }
+
+    /* Hotspots */
+    .mk-hotspots { position:absolute; inset:0; opacity:0; transition: opacity .45s ease .1s; pointer-events:none; }
+    .mk-stage.is-open .mk-hotspots { opacity:1; pointer-events:auto; }
+    .mk-dot { position:absolute; transform: translate(-50%,-50%); width:30px; height:30px; border-radius:50%;
+      border:2px solid var(--rice); background: rgba(200,162,75,.55); color:#fff; cursor:pointer; padding:0;
+      display:grid; place-items:center; transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+      box-shadow: 0 0 0 0 rgba(200,162,75,.6); animation: mk-pulse 2.4s ease-out infinite; }
+    .mk-dot::after { content:""; width:8px; height:8px; border-radius:50%; background:var(--rice); }
+    @keyframes mk-pulse { 0%{ box-shadow:0 0 0 0 rgba(200,162,75,.5);} 70%{ box-shadow:0 0 0 12px rgba(200,162,75,0);} 100%{ box-shadow:0 0 0 0 rgba(200,162,75,0);} }
+    .mk-dot:hover, .mk-dot:focus-visible, .mk-dot.active { background: var(--chili, #b5392b); transform: translate(-50%,-50%) scale(1.35); animation:none; outline:none; }
+    .mk-stage.has-active .mk-dot:not(.active) { opacity:.35; }
+    /* spotlight ring on the active ingredient */
+    .mk-ring { position:absolute; transform:translate(-50%,-50%) scale(.6); width:120px; height:120px; border-radius:50%;
+      border:2px solid var(--gold); box-shadow:0 0 0 9999px rgba(14,14,14,.45); opacity:0; transition:.3s ease; pointer-events:none; }
+    .mk-stage.has-active .mk-ring { opacity:1; transform:translate(-50%,-50%) scale(1); }
+
+    /* Info panel */
+    .mk-info { background:var(--rice-card); border:1px solid var(--line); border-radius:16px; padding:1.6rem; min-height:280px;
+      display:flex; flex-direction:column; }
+    .mk-info .intro img { width:100%; border-radius:12px; margin-bottom:1rem; }
+    .mk-info h3 { font-size:1.5rem; margin-bottom:.2rem; }
+    .mk-info .name-th { font-family:var(--f-thai); color:var(--palm); font-size:1.7rem; display:block; line-height:1.1; }
+    .mk-info .benefit-th { font-family:var(--f-thai); color:var(--betel); font-size:1.12rem; margin-top:.9rem; line-height:1.5; }
+    .mk-info .benefit-en { color:var(--muted); margin-top:.5rem; line-height:1.55; }
+    .mk-counter { margin-top:auto; padding-top:1.2rem; color:var(--muted); font-size:var(--t-sm); border-top:1px dashed var(--line); }
+    .mk-counter b { color:var(--betel); }
+    .mk-fade { animation: mk-fade .35s ease; }
+    @keyframes mk-fade { from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:none;} }
+
+    @media (prefers-reduced-motion: reduce){ .mk-disc, .mk-box-lid{ animation:none; } .mk-dot{ animation:none; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="index.html" aria-label="Yaiya home">
+        <span class="mark"><img src="assets/img/Yaiya_mark.png" alt="" width="40" height="40" /></span>
+        <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+      </a>
+      <nav class="nav" data-nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="shop.html#signature">Miang Kham</a>
+        <a href="index.html#story">Our Story</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="icon-btn" href="cart.html" aria-label="Your basket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="cart-count" data-cart-count hidden>0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="mk-section">
+      <div class="wrap">
+        <span class="mk-proto-tag">Prototype · for testing</span>
+        <h1><span class="th" style="display:block;font-family:var(--f-thai);color:var(--palm);font-size:.6em">เมี่ยงคำ</span>Unwrap the perfect bite</h1>
+        <p class="lede" style="margin:.6rem 0 2rem">Hover (or tap) the rotating set to open it, then explore each of the nine ingredients to see what it gives you.</p>
+
+        <div class="mk-layout">
+          <!-- STAGE -->
+          <div class="mk-stage" id="mk-stage" tabindex="0" role="group" aria-label="Interactive Miang Kham — activate to reveal ingredients">
+            <img class="mk-platter" src="assets/img/products/miang-kham-set/miang-kham-ingredients.jpg"
+                 alt="Miang Kham ingredients laid out in petal dishes" />
+            <div class="mk-ring" id="mk-ring" aria-hidden="true"></div>
+            <div class="mk-hotspots" id="mk-hotspots"></div>
+            <div class="mk-lid" aria-hidden="true">
+              <div class="mk-box-scene"><div class="mk-box-body"><div class="mk-box-lid" style="background-image:url('assets/img/products/miang-kham-set/miang-kham-box.png')"></div></div></div>
+            </div>
+            <div class="mk-prompt"><span class="th">เปิด</span>Hover to open →</div>
+          </div>
+
+          <!-- INFO -->
+          <div class="mk-info" id="mk-info" aria-live="polite">
+            <div class="intro mk-fade" id="mk-intro">
+              <img src="assets/img/products/miang-kham-set/miang-kham-4.jpg" alt="An assembled bite of Miang Kham" />
+              <h3>One leaf, many flavours</h3>
+              <p style="color:var(--muted);margin-top:.4rem">Miang kham balances sweet, sour, salty, hot and bitter in a single fold. Open the set and hover an ingredient to learn its benefit.</p>
+              <div class="mk-counter"><b id="mk-count">0</b> / 9 ingredients explored</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <span class="mark"><img src="assets/img/Yaiya_logo.jpg" alt="" width="40" height="40" /></span>
+          <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+        </a>
+        <p>Grandma's Thai food, made by hand in small batches.</p>
+      </div>
+      <div><h5>Shop</h5><a href="shop.html#signature">Miang Kham</a><a href="shop.html#paste">Chilli Pastes</a><a href="shop.html#preserved">Fermented &amp; Preserved</a></div>
+      <div><h5>Yaiya</h5><a href="index.html#story">Our story</a><a href="index.html#process">How we make it</a></div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© <span id="year">2026</span> Yaiya · ยายย่า.</span>
+      <span>Prototype page — not linked in navigation.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Ingredient hotspots: x/y are % positions over the ingredients photo (tweak freely).
+    const INGREDIENTS = [
+      { th:"ใบชะพลู", en:"Betel leaf", x:7,  y:17, bt:"มีแคลเซียมและไฟเบอร์สูง ช่วยขับลมและย่อยอาหาร", be:"High in calcium and fibre; warming and eases digestion." },
+      { th:"ขิง",      en:"Ginger",     x:34, y:10, bt:"ช่วยย่อยอาหาร ลดอาการท้องอืด และเพิ่มความอบอุ่นแก่ร่างกาย", be:"Aids digestion, soothes bloating and warms the body." },
+      { th:"มะนาว",    en:"Lime",       x:57, y:17, bt:"วิตามินซีสูง ช่วยเสริมภูมิคุ้มกันและความสดชื่น", be:"Rich in vitamin C to boost immunity." },
+      { th:"ถั่วลิสง",  en:"Peanut",     x:26, y:39, bt:"โปรตีนและวิตามินอี ช่วยบำรุงผิวและหัวใจ", be:"Protein and vitamin E for skin and heart." },
+      { th:"กุ้งแห้ง",  en:"Dried shrimp", x:42, y:48, bt:"แหล่งโปรตีนและแคลเซียมสูง ช่วยบำรุงกระดูก", be:"High in protein and calcium for strong bones." },
+      { th:"น้ำเมี่ยง", en:"Palm-sugar sauce", x:88, y:45, bt:"ให้พลังงานและรสกลมกล่อม รวมทุกรสชาติไว้ด้วยกัน", be:"Energy and the balancing sweetness that ties the bite together." },
+      { th:"มะพร้าวคั่ว", en:"Toasted coconut", x:9, y:80, bt:"ให้ไขมันดีและไฟเบอร์ ช่วยให้ระบบขับถ่ายทำงานดี", be:"Good fats and fibre to aid digestion." },
+      { th:"หอมแดง",   en:"Shallot",    x:60, y:68, bt:"อุดมด้วยสารต้านอนุมูลอิสระ ช่วยลดหวัดและบำรุงหัวใจ", be:"Antioxidants that help fight colds." },
+      { th:"พริกขี้หนู", en:"Bird's-eye chilli", x:50, y:91, bt:"กระตุ้นการเผาผลาญและการไหลเวียนเลือด", be:"Boosts metabolism and circulation." }
+    ];
+
+    (function () {
+      const stage = document.getElementById("mk-stage");
+      const hotspots = document.getElementById("mk-hotspots");
+      const info = document.getElementById("mk-info");
+      const intro = document.getElementById("mk-intro");
+      const ring = document.getElementById("mk-ring");
+      const seen = new Set();
+
+      // Build hotspot buttons
+      INGREDIENTS.forEach((ing, i) => {
+        const b = document.createElement("button");
+        b.className = "mk-dot";
+        b.style.left = ing.x + "%";
+        b.style.top = ing.y + "%";
+        b.dataset.i = i;
+        b.setAttribute("aria-label", ing.en + " — " + ing.be);
+        hotspots.appendChild(b);
+      });
+      const dots = [...hotspots.querySelectorAll(".mk-dot")];
+
+      function open() { stage.classList.add("is-open"); }
+      function close() { stage.classList.remove("is-open"); clearActive(); }
+
+      function setActive(i) {
+        const ing = INGREDIENTS[i];
+        dots.forEach((d) => d.classList.toggle("active", +d.dataset.i === i));
+        stage.classList.add("has-active");
+        ring.style.left = ing.x + "%"; ring.style.top = ing.y + "%";
+        seen.add(i);
+        info.innerHTML = `<div class="mk-fade">
+            <span class="name-th">${ing.th}</span>
+            <h3>${ing.en}</h3>
+            <p class="benefit-th">${ing.bt}</p>
+            <p class="benefit-en">${ing.be}</p>
+            <div class="mk-counter"><b>${seen.size}</b> / ${INGREDIENTS.length} ingredients explored</div>
+          </div>`;
+      }
+      function clearActive() {
+        dots.forEach((d) => d.classList.remove("active"));
+        stage.classList.remove("has-active");
+        info.innerHTML = "";
+        info.appendChild(intro);
+        document.getElementById("mk-count").textContent = seen.size;
+      }
+
+      // Desktop: hover opens; leaving resets
+      stage.addEventListener("mouseenter", open);
+      stage.addEventListener("mouseleave", close);
+      // Keyboard / touch: toggle open when activating the stage itself
+      stage.addEventListener("click", (e) => { if (!e.target.closest(".mk-dot")) stage.classList.toggle("is-open"); });
+      stage.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); stage.classList.toggle("is-open"); } });
+
+      // Ingredient interactions
+      dots.forEach((d) => {
+        const i = +d.dataset.i;
+        d.addEventListener("mouseenter", () => setActive(i));
+        d.addEventListener("focus", () => { open(); setActive(i); });
+        d.addEventListener("click", (e) => { e.stopPropagation(); open(); setActive(i); });
+      });
+      // On desktop, clear selection when pointer leaves the hotspot cluster (but stays in stage)
+      hotspots.addEventListener("mouseleave", () => { if (matchMedia("(hover:hover)").matches) clearActive(); });
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>

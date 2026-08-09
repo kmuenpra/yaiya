@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product · Yaiya</title>
+  <meta name="description" content="A Yaiya product — made by hand in small batches from Grandma's Thai recipes." />
+  <link rel="icon" href="assets/img/Yaiya_logo.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Chonburi&family=Noto+Sans+Thai:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="index.html" aria-label="Yaiya home">
+        <span class="mark"><img src="assets/img/Yaiya_mark.png" alt="" width="40" height="40" /></span>
+        <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+      </a>
+      <nav class="nav" data-nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="product.html?id=miang-kham-set">Miang Kham</a>
+        <a href="index.html#story">Our Story</a>
+        <a href="index.html#process">How We Make It</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="icon-btn" href="cart.html" aria-label="Your basket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="cart-count" data-cart-count hidden>0</span>
+        </a>
+        <button class="nav-toggle" data-nav-toggle aria-label="Open menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section" style="padding-top:2rem">
+    <div class="wrap">
+      <div class="crumbs" style="color:var(--palm-deep);margin-bottom:1.4rem"><a href="index.html">Home</a><span>/</span><a href="shop.html">Shop</a><span>/</span><span id="crumb-name">Product</span></div>
+      <div class="detail" id="detail"><!-- injected --></div>
+
+      <!-- related -->
+      <div style="margin-top:4rem">
+        <div class="center" style="margin-bottom:2rem">
+          <span class="eyebrow">More from the pantry</span>
+          <h2 class="section-title">You might also fold</h2>
+        </div>
+        <div class="product-grid" id="related"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <span class="mark"><img src="assets/img/Yaiya_logo.jpg" alt="" width="40" height="40" /></span>
+          <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+        </a>
+        <p>Grandma's Thai food, made by hand in small batches.</p>
+      </div>
+      <div><h5>Shop</h5><a href="shop.html#signature">Miang Kham</a><a href="shop.html#paste">Chilli Pastes</a><a href="shop.html#preserved">Fermented &amp; Preserved</a></div>
+      <div><h5>Yaiya</h5><a href="index.html#story">Our story</a><a href="index.html#process">How we make it</a></div>
+      <div><h5>Care</h5><a href="#">Shipping</a><a href="#">Storage</a><a href="#">Contact</a></div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© <span id="year">2026</span> Yaiya · ยายย่า.</span>
+      <span>Demo storefront — placeholder imagery.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- NOTE (2026-08-09): 3D jar model disabled — re-enable by uncommenting the importmap
+       and jar3d.js module below, and restoring `interactive:` in products.js
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+  <script type="module" src="assets/js/jar3d.js"></script>
+  -->
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const p = getProduct(params.get("id")) || PRODUCTS[0];
+      document.title = `${p.name} · ${p.nameTh} — Yaiya`;
+      document.getElementById("crumb-name").textContent = p.name;
+
+      const catLabel = { signature: "Signature Miang Kham", paste: "Chilli Paste", sauce: "Dipping Sauce", preserved: "Fermented & Preserved" }[p.category];
+      const heat = (n) => { let s = ""; for (let i = 1; i <= 3; i++) s += `<span class="pip ${i <= n ? "on" : ""}"></span>`; return s; };
+
+      const componentsBlock = p.components && p.components.length
+        ? `<div style="margin-top:1.2rem">
+            <h3 style="font-size:var(--t-lg);color:var(--betel);margin-bottom:0.6rem">In the box · แปดเครื่อง</h3>
+            <div class="ingredient-list">
+              ${p.components.map((c, i) => `<div class="ingredient"><span class="num">${String(i+1).padStart(2,"0")}</span><span><span class="name-th">${c.th}</span> · <span class="name-en">${c.en}</span></span><span class="note">${c.note}</span></div>`).join("")}
+            </div>
+          </div>` : "";
+
+      // When a product has a slideshow gallery, the infographic appears as a slide,
+      // so the standalone health-benefits dropdown is omitted.
+      const hasGallery = !!(p.interactive && p.interactive.gallery);
+      const infographicBlock = (p.infographic && !hasGallery)
+        ? `<details class="benefits" open>
+            <summary><span>Health benefits · ประโยชน์</span>
+              <svg class="benefits-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="benefits-body"><img src="${p.infographic}" alt="${p.name} — health benefits" loading="lazy" /></div>
+          </details>` : "";
+
+      const ix = p.interactive;
+      const galleryImgs = (ix && ix.gallery) ? ix.gallery : [];
+      const mediaBlock = ix
+        ? `<div class="detail-media is-interactive mk-gallery" id="mk-gallery">
+            <div class="mk-slides">
+              <div class="mk-slide mk-slide-stage is-active"><div id="mk-root"></div></div>
+              ${galleryImgs.map((src) => `<div class="mk-slide"><img src="${src}" alt="${p.name}" loading="lazy" /></div>`).join("")}
+              <button class="mk-nav mk-nav-prev" data-dir="-1" type="button" aria-label="Previous slide">‹</button>
+              <button class="mk-nav mk-nav-next" data-dir="1" type="button" aria-label="Next slide">›</button>
+              <div id="mk-readout-host" class="mk-readout-overlay"></div>
+            </div>
+            <div class="mk-dots">${["interactive", ...galleryImgs].map((_, n) => `<button class="mk-godot${n === 0 ? " active" : ""}" type="button" data-go="${n}" aria-label="Slide ${n + 1}"></button>`).join("")}</div>
+          </div>`
+        : `<div class="detail-media">${productImage(p)}</div>`;
+
+      document.getElementById("detail").innerHTML = `
+        ${mediaBlock}
+        <div>
+          <span class="badge" style="position:static;display:inline-block;margin-bottom:0.8rem">${catLabel}</span>
+          <h1><span class="th">${p.nameTh}</span></h1>
+          <p class="p-en-sub">${p.name} · ${p.tagline}</p>
+          <div class="price-row">
+            <span class="price">${formatTHB(p.price)}</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:var(--t-sm)">Heat <span class="heat">${heat(p.heat)}</span></span>
+          </div>
+          <div class="meta-list">
+            <span><b>Size</b> · ${p.weight}</span>
+            <span><b>Batch</b> · small, hand-made</span>
+            <span><b>Keeps</b> · refrigerate after opening</span>
+          </div>
+          <p class="story-text-th">${p.storyTh}</p>
+          <p class="story-text">${p.story}</p>
+          <div class="buy-row">
+            <div class="qty">
+              <button type="button" id="dec" aria-label="Decrease quantity">−</button>
+              <input id="qty" type="number" value="1" min="1" max="20" aria-label="Quantity" />
+              <button type="button" id="inc" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="btn btn-primary" id="add" style="flex:1;min-width:180px">Add to basket — <span id="line-total">${formatTHB(p.price)}</span></button>
+          </div>
+          <a href="cart.html" class="btn btn-ghost" style="margin-top:0.8rem;width:100%">Go to basket</a>
+          ${componentsBlock}
+          ${infographicBlock}
+        </div>`;
+
+      const qty = document.getElementById("qty");
+      const lineTotal = document.getElementById("line-total");
+      const updateTotal = () => { lineTotal.innerHTML = formatTHB(p.price * Math.max(1, +qty.value || 1)); };
+      document.getElementById("dec").addEventListener("click", () => { qty.value = Math.max(1, (+qty.value || 1) - 1); updateTotal(); });
+      document.getElementById("inc").addEventListener("click", () => { qty.value = Math.min(20, (+qty.value || 1) + 1); updateTotal(); });
+      qty.addEventListener("input", updateTotal);
+      document.getElementById("add").addEventListener("click", () => addToCart(p.id, Math.max(1, +qty.value || 1)));
+
+      // related: same category first, fallback to others
+      const related = PRODUCTS.filter((x) => x.id !== p.id)
+        .sort((a, b) => (b.category === p.category) - (a.category === p.category))
+        .slice(0, 4);
+      document.getElementById("related").innerHTML = related.map((rp) => `
+        <article class="product-card">
+          <a class="product-media" href="product.html?id=${rp.id}">${rp.category === "signature" ? '<span class="badge">Signature</span>' : ""}${productImage(rp)}</a>
+          <div class="product-body">
+            <a href="product.html?id=${rp.id}"><span class="p-th">${rp.nameTh}</span></a>
+            <span class="p-en">${rp.name}</span>
+            <div class="product-foot" style="margin-top:0.6rem">
+              <span class="price">${formatTHB(rp.price)}</span>
+              <button class="add-btn" data-add="${rp.id}" aria-label="Add ${rp.name}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+            </div>
+          </div>
+        </article>`).join("");
+      document.getElementById("related").addEventListener("click", (e) => {
+        const b = e.target.closest("[data-add]"); if (b) addToCart(b.dataset.add);
+      });
+
+      // Interactive "unwrap" stage + slideshow (only when the product defines `interactive`)
+      if (ix) {
+        const readoutHost = document.getElementById("mk-readout-host");
+        try {
+          mountUnwrap(document.getElementById("mk-root"), ix, { readoutEl: readoutHost, trigger: "click" });
+        } catch (err) {
+          console.error("Interactive unwrap failed:", err);
+        }
+        const gallery = document.getElementById("mk-gallery");
+        const slides = [...gallery.querySelectorAll(".mk-slide")];
+        const godots = [...gallery.querySelectorAll(".mk-godot")];
+        let cur = 0;
+        const go = (n) => {
+          cur = (n + slides.length) % slides.length;
+          slides.forEach((s, i) => s.classList.toggle("is-active", i === cur));
+          godots.forEach((d, i) => d.classList.toggle("active", i === cur));
+          readoutHost.style.display = cur === 0 ? "" : "none"; // benefits readout only on the interactive slide
+        };
+        gallery.querySelectorAll(".mk-nav").forEach((b) => b.addEventListener("click", () => go(cur + (+b.dataset.dir))));
+        godots.forEach((d) => d.addEventListener("click", () => go(+d.dataset.go)));
+      }
+
+      window.scrollTo(0, 0);
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+

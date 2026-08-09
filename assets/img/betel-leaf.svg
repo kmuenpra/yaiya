@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 360" fill="none" role="img" aria-label="Betel leaf with miang kham filling">
+  <defs>
+    <radialGradient id="leafG" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#3E7A4F"/>
+      <stop offset="60%" stop-color="#2C5C39"/>
+      <stop offset="100%" stop-color="#1E3D2C"/>
+    </radialGradient>
+    <linearGradient id="goldG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E4C778"/>
+      <stop offset="100%" stop-color="#C8A24B"/>
+    </linearGradient>
+  </defs>
+  <!-- shadow -->
+  <ellipse cx="162" cy="332" rx="120" ry="16" fill="#1E3D2C" opacity="0.12"/>
+  <!-- leaf body -->
+  <path d="M160 24c70 48 112 96 112 158 0 60-50 104-112 104S48 242 48 182C48 120 90 72 160 24z" fill="url(#leafG)"/>
+  <path d="M160 24c70 48 112 96 112 158 0 60-50 104-112 104S48 242 48 182C48 120 90 72 160 24z" stroke="#16301F" stroke-width="2"/>
+  <!-- veins -->
+  <path d="M160 40v228" stroke="#7BB089" stroke-width="2" opacity="0.5"/>
+  <g stroke="#7BB089" stroke-width="1.5" opacity="0.4" fill="none">
+    <path d="M160 96c-22 10-42 24-58 44M160 96c22 10 42 24 58 44M160 150c-26 12-50 30-68 54M160 150c26 12 50 30 68 54M160 206c-20 10-38 24-52 42M160 206c20 10 38 24 52 42"/>
+  </g>
+  <!-- miang kham fillings (toasted coconut, peanut, shrimp, lime, ginger, shallot, chili) -->
+  <g>
+    <circle cx="138" cy="150" r="13" fill="#E9D7A6"/><!-- coconut -->
+    <circle cx="178" cy="146" r="11" fill="#C99A5B"/><!-- peanut -->
+    <circle cx="150" cy="182" r="10" fill="#E7A36B"/><!-- dried shrimp -->
+    <circle cx="186" cy="180" r="9" fill="#D7E26A"/><!-- lime -->
+    <circle cx="128" cy="182" r="8" fill="#E4C778"/><!-- ginger -->
+    <circle cx="166" cy="166" r="9" fill="#F0E3C2"/><!-- shallot -->
+    <circle cx="158" cy="200" r="7" fill="#B5392B"/><!-- chili -->
+    <circle cx="146" cy="166" r="5" fill="#8B5E34"/>
+  </g>
+  <!-- palm-sugar sauce drizzle -->
+  <path d="M150 138c10-6 24-6 34 0" stroke="url(#goldG)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <!-- kanok accent -->
+  <path d="M160 18c0-6 3-10 8-12-2 3.6.4 6.6 3.2 8-5 .4-8.4 1.8-11.2 4z" fill="url(#goldG)"/>
+</svg>

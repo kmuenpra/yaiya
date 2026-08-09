@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yaiya · ยายย่า — Grandma's Thai Food, Made by Hand</title>
+  <meta name="description" content="Yaiya makes Thailand's perfect bite — miang kham sets, hand-pounded chilli pastes and palm-sugar sauces, in small batches from Grandma's recipes." />
+  <link rel="icon" href="assets/img/Yaiya_logo.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Chonburi&family=Noto+Sans+Thai:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="index.html" aria-label="Yaiya home">
+        <span class="mark"><img src="assets/img/Yaiya_mark.png" alt="" width="40" height="40" /></span>
+        <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+      </a>
+      <nav class="nav" data-nav aria-label="Primary">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="product.html?id=miang-kham-set">Miang Kham</a>
+        <a href="#story">Our Story</a>
+        <a href="#process">How We Make It</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="icon-btn" href="cart.html" aria-label="Your basket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="cart-count" data-cart-count hidden>0</span>
+        </a>
+        <button class="nav-toggle" data-nav-toggle aria-label="Open menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow">ยายย่า · Grandma's Thai Food</span>
+          <h1><span class="th">เมี่ยงคำ</span>One leaf. <em>One perfect bite.</em></h1>
+          <p>We are named for our grandmother, and for the dish she taught us — <strong>miang kham</strong>, where sweet, sour, salt, heat and bitter all meet in a single fold of betel leaf. Made by hand, in small batches, the way she did.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="shop.html">Shop the pantry <span class="arrow">→</span></a>
+            <a class="btn btn-gold" href="#anatomy">Taste the ritual</a>
+          </div>
+          <div class="hero-stats">
+            <div><div class="s-num">8</div><div class="s-label">condiments, one bite</div></div>
+            <div><div class="s-num">100%</div><div class="s-label">small-batch, hand-pounded</div></div>
+            <div><div class="s-num">0</div><div class="s-label">preservatives, ever</div></div>
+          </div>
+        </div>
+        <div class="hero-art">
+          <span class="halo two"></span>
+          <span class="halo"></span>
+          <div class="hero-photo-wrap">
+            <img class="hero-photo" src="assets/img/products/miang-kham-set/miang-kham-4.jpg" alt="A folded bite of miang kham on a betel leaf, with lotus-petal dishes of condiments" />
+            <img class="hero-stamp" src="assets/img/Yaiya_logo.jpg" alt="Yaiya seal — ยายย่า" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ANATOMY OF A BITE (signature) ============ -->
+    <section class="section anatomy" id="anatomy">
+      <div class="wrap">
+        <div class="center" style="margin-bottom:2.4rem">
+          <span class="eyebrow">The signature</span>
+          <h2 class="section-title"><span class="th">แปดเครื่องเมี่ยง</span>Anatomy of a perfect bite</h2>
+          <p class="lede">Miang kham isn't cooked — it's <em>assembled</em>, at the table, by you. Open the set and hover each ingredient to see what it gives you.</p>
+        </div>
+        <div class="mk-anatomy" id="mk-anatomy">
+          <div class="mk-readout" id="mk-anatomy-readout" aria-live="polite">
+            <p class="hint"><span class="th">เคล็ดลับ</span>Hover an ingredient to see its health benefit.</p>
+          </div>
+          <div class="mk-stage is-open" id="mk-anatomy-stage" role="group" aria-label="Hover an ingredient to see its health benefit">
+            <img class="mk-platter" src="assets/img/products/miang-kham-set/miang-kham-ingredients.jpg" alt="Miang kham ingredients laid out for folding" />
+            <div class="mk-ring" aria-hidden="true"></div>
+            <div class="mk-hotspots" id="mk-anatomy-hotspots"></div>
+          </div>
+        </div>
+        <div class="center" style="margin-top:2.2rem">
+          <a class="btn btn-ghost" href="product.html?id=miang-kham-set">Get the Miang Kham set <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STORY ============ -->
+    <section class="section" id="story">
+      <div class="wrap split">
+        <div data-reveal>
+          <span class="eyebrow">Our story</span>
+          <h2 class="section-title"><span class="th">จากครัวของยาย</span>From Grandma's kitchen, not a factory</h2>
+          <p class="lede" style="font-size:var(--t-base)">Yaiya began at a worn wooden table in the South, where our grandmother — <em>ยายย่า</em> — pounded chilli pastes by hand and folded miang kham for anyone who walked in. Nothing was measured; everything was tasted.</p>
+          <p style="color:var(--muted);margin-top:1rem">We still pound, never blend. We still roast over real heat. Every jar is filled in small batches so the flavour stays as loud and bright as it was at her table.</p>
+          <div style="display:flex;gap:0.8rem;margin-top:1.6rem;flex-wrap:wrap">
+            <a class="btn btn-primary" href="#process">How we make it</a>
+            <a class="btn btn-ghost" href="shop.html">Browse the pantry</a>
+          </div>
+        </div>
+        <div class="story-card" data-reveal data-reveal-delay="120">
+          <p class="story-quote">"Sweet, sour, salt and fire — if a bite has all of them, it has everything."</p>
+          <p style="margin-top:1.2rem">It is the rule she cooked by, and the rule every Yaiya jar is held to before it leaves us.</p>
+          <p class="story-sign">— ยายย่า, our grandmother</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURED PRODUCTS ============ -->
+    <section class="section" id="featured" style="background:var(--rice-deep)">
+      <div class="wrap">
+        <div class="center" style="margin-bottom:2.4rem">
+          <span class="eyebrow">From the pantry</span>
+          <h2 class="section-title"><span class="th">ของขายดี</span>Loved at the table</h2>
+          <img class="divider-art" src="assets/img/divider.svg" alt="" />
+        </div>
+        <div class="product-grid" id="featured-grid"></div>
+        <div class="center" style="margin-top:2.4rem">
+          <a class="btn btn-ghost" href="shop.html">See everything <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CATEGORIES ============ -->
+    <section class="section" id="categories">
+      <div class="wrap">
+        <div class="center" style="margin-bottom:2.2rem">
+          <span class="eyebrow">Three shelves</span>
+          <h2 class="section-title">What we make</h2>
+        </div>
+        <div class="cat-grid">
+          <a class="cat-card" href="shop.html#signature" data-reveal>
+            <span class="c-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            <span><span class="c-th">เมี่ยงคำ</span><br /><span class="c-en">Signature Miang Kham</span></span>
+          </a>
+          <a class="cat-card" href="shop.html#paste" data-reveal data-reveal-delay="100">
+            <span class="c-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            <span><span class="c-th">น้ำพริก & พริกแกง</span><br /><span class="c-en">Hand-pounded Chilli Pastes</span></span>
+          </a>
+          <a class="cat-card" href="shop.html#preserved" data-reveal data-reveal-delay="200">
+            <span class="c-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            <span><span class="c-th">ของดอง</span><br /><span class="c-en">Fermented &amp; Preserved</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROCESS ============ -->
+    <section class="section anatomy" id="process">
+      <div class="wrap">
+        <div class="center" style="margin-bottom:2.4rem">
+          <span class="eyebrow">How we make it</span>
+          <h2 class="section-title"><span class="th">ทำมือทุกขั้นตอน</span>Slow, by hand, in small batches</h2>
+        </div>
+        <div class="process-grid">
+          <div class="process-step" data-reveal>
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10Z"/><path d="M9 14c.5 1.5 1.5 2.3 3 2.5"/></svg></div>
+            <h4>1 · Source</h4>
+            <p>Betel leaves, palm sugar and chillies from Thai growers we know by name.</p>
+          </div>
+          <div class="process-step" data-reveal data-reveal-delay="100">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21h14"/><path d="M7 21V9l5-5 5 5v12"/><path d="M10 13h4"/></svg></div>
+            <h4>2 · Pound</h4>
+            <p>Stone mortar, never a blender — so the oils release slow and the paste keeps its grain.</p>
+          </div>
+          <div class="process-step" data-reveal data-reveal-delay="200">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1.5 3 4 4.5 4 7.5A4 4 0 0 1 8 9.5C8 6.5 10.5 5 12 2Z"/><path d="M5 14c0 4 3 7 7 7s7-3 7-7"/></svg></div>
+            <h4>3 · Roast</h4>
+            <p>Real heat coaxes the smoke and caramel out of every chilli and shallot.</p>
+          </div>
+          <div class="process-step" data-reveal data-reveal-delay="300">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="9" width="12" height="11" rx="2"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/><path d="M12 13v3"/></svg></div>
+            <h4>4 · Jar</h4>
+            <p>Filled the same day, sealed by hand. No preservatives, nothing to hide.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TESTIMONIAL BAND ============ -->
+    <section class="section feature-band">
+      <div class="wrap center">
+        <span class="eyebrow" style="color:var(--gold-soft)">From our table to yours</span>
+        <p class="quote-big" style="margin-top:1rem">"I folded my first miang kham and was eight years old again, in my grandmother's kitchen in Hat Yai."</p>
+        <p class="quote-author">— Ploy S., Bangkok</p>
+      </div>
+    </section>
+
+    <!-- ============ NEWSLETTER ============ -->
+    <section class="section center">
+      <div class="wrap">
+        <span class="eyebrow">Stay in touch</span>
+        <h2 class="section-title">Recipes, restocks & a little nostalgia</h2>
+        <p class="lede" style="margin-inline:auto">A gentle note now and then — never more than once a month.</p>
+        <form class="newsletter" id="news-form" novalidate>
+          <input type="email" name="email" placeholder="your@email.com" aria-label="Email address" required />
+          <button class="btn btn-primary" type="submit">Subscribe</button>
+        </form>
+        <p id="news-msg" style="font-size:var(--t-sm);color:var(--betel-700);margin-top:0.8rem;min-height:1.2em" role="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <span class="mark"><img src="assets/img/Yaiya_logo.jpg" alt="" width="40" height="40" /></span>
+          <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+        </a>
+        <p>Grandma's Thai food, made by hand in small batches. Miang kham, chilli pastes and palm-sugar sauces from real Thai recipes.</p>
+      </div>
+      <div>
+        <h5>Shop</h5>
+        <a href="shop.html#signature">Miang Kham</a>
+        <a href="shop.html#paste">Chilli Pastes</a>
+        <a href="shop.html#preserved">Fermented &amp; Preserved</a>
+        <a href="shop.html">All products</a>
+      </div>
+      <div>
+        <h5>Yaiya</h5>
+        <a href="#story">Our story</a>
+        <a href="#process">How we make it</a>
+        <a href="#anatomy">The perfect bite</a>
+      </div>
+      <div>
+        <h5>Care</h5>
+        <a href="#">Shipping</a>
+        <a href="#">Storage & freshness</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© <span id="year">2026</span> Yaiya · ยายย่า. Made with care in Thailand.</span>
+      <span>Demo storefront — placeholder imagery, swap in your own photos.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    // Featured: signature first, then a few best-loved jars
+    (function () {
+      const order = ["miang-kham-set", "nam-prik-makham", "khing-dong", "pla-ra"];
+      const grid = document.getElementById("featured-grid");
+      grid.innerHTML = order.map((id, i) => {
+        const p = getProduct(id);
+        const badge = p.category === "signature" ? '<span class="badge">Signature</span>' : "";
+        return `<article class="product-card" data-reveal data-reveal-delay="${i * 90}">
+          <a class="product-media" href="product.html?id=${p.id}" aria-label="${p.name}">
+            ${badge}${productImage(p)}
+          </a>
+          <div class="product-body">
+            <a href="product.html?id=${p.id}"><span class="p-th">${p.nameTh}</span></a>
+            <span class="p-en">${p.name}</span>
+            <p class="p-blurb-th">${p.taglineTh}</p>
+            <p class="p-blurb">${p.tagline}</p>
+            <div class="product-foot">
+              <span class="price">${formatTHB(p.price)}<span class="w">${p.weight}</span></span>
+              <button class="add-btn" data-add="${p.id}" aria-label="Add ${p.name} to basket">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+          </div>
+        </article>`;
+      }).join("");
+
+      // Anatomy of a bite: hover an ingredient to see its Thai health benefit with English subtitle
+      (function () {
+        const ingredients = MIANG_KHAM_INTERACTIVE.ingredients;
+        const stage = document.getElementById("mk-anatomy-stage");
+        const hotspots = document.getElementById("mk-anatomy-hotspots");
+        const ring = stage.querySelector(".mk-ring");
+        const readout = document.getElementById("mk-anatomy-readout");
+        const hint = readout.innerHTML;
+
+        hotspots.innerHTML = ingredients.map((g, i) =>
+          `<button type="button" class="mk-dot" style="left:${g.x}%;top:${g.y}%" data-i="${i}" aria-label="${g.en} — ${g.be}"></button>`).join("");
+        const dots = [...hotspots.querySelectorAll(".mk-dot")];
+
+        const setActive = (i) => {
+          const g = ingredients[i];
+          dots.forEach((d) => d.classList.toggle("active", +d.dataset.i === i));
+          stage.classList.add("has-active");
+          ring.style.left = g.x + "%"; ring.style.top = g.y + "%";
+          readout.innerHTML = `<div class="mk-fade"><span class="name-th">${g.th}</span><h4>${g.en}</h4><p class="benefit-th">${g.bt}</p><p class="benefit-en">${g.be}</p></div>`;
+        };
+        const clearActive = () => {
+          dots.forEach((d) => d.classList.remove("active"));
+          stage.classList.remove("has-active");
+          readout.innerHTML = hint;
+        };
+
+        dots.forEach((d) => {
+          const i = +d.dataset.i;
+          d.addEventListener("mouseenter", () => setActive(i));
+          d.addEventListener("focus", () => setActive(i));
+          d.addEventListener("click", () => setActive(i));
+        });
+        hotspots.addEventListener("mouseleave", () => { if (matchMedia("(hover:hover)").matches) clearActive(); });
+      })();
+
+      // delegate add-to-cart
+      grid.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-add]");
+        if (b) { addToCart(b.dataset.add); }
+      });
+
+      // newsletter (front-end only)
+      const form = document.getElementById("news-form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = form.email.value.trim();
+        const msg = document.getElementById("news-msg");
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = "Please enter a valid email."; msg.style.color = "var(--chili)"; return; }
+        msg.textContent = "ขอบคุณค่ะ — you're on the list!"; msg.style.color = "var(--betel-700)";
+        form.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+

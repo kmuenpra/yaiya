@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout · Yaiya</title>
+  <meta name="description" content="Checkout — Yaiya demo storefront." />
+  <link rel="icon" href="assets/img/Yaiya_logo.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Chonburi&family=Noto+Sans+Thai:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="index.html" aria-label="Yaiya home">
+        <span class="mark"><img src="assets/img/Yaiya_mark.png" alt="" width="40" height="40" /></span>
+        <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+      </a>
+      <nav class="nav" data-nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="product.html?id=miang-kham-set">Miang Kham</a>
+        <a href="index.html#story">Our Story</a>
+        <a href="index.html#process">How We Make It</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="icon-btn" href="cart.html" aria-label="Your basket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="cart-count" data-cart-count hidden>0</span>
+        </a>
+        <button class="nav-toggle" data-nav-toggle aria-label="Open menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Static, hidden copy of the order form so Netlify's build-time crawler can register it —
+       Netlify Forms only detects forms present in the raw HTML, not ones rendered by JS.
+       Field names here must match what order-service.js's "netlify" adapter POSTs. Only used
+       while ACTIVE_ADAPTER === "netlify" in assets/js/order-service.js; harmless otherwise. -->
+  <form name="order" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="text" name="order-no" />
+    <input type="text" name="first-name" />
+    <input type="text" name="last-name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="address" />
+    <input type="text" name="city" />
+    <input type="text" name="zip" />
+    <input type="text" name="province" />
+    <input type="text" name="payment-method" />
+    <input type="text" name="subtotal" />
+    <input type="text" name="shipping" />
+    <input type="text" name="total" />
+    <textarea name="items"></textarea>
+    <textarea name="order-json"></textarea>
+    <input type="text" name="bot-field" />
+  </form>
+
+  <main class="section" style="padding-top:2.4rem">
+    <div class="wrap">
+      <div class="crumbs" style="color:var(--palm-deep);margin-bottom:0.8rem"><a href="cart.html">Basket</a><span>/</span><span>Checkout</span></div>
+      <h1 class="section-title" style="margin-bottom:1.6rem"><span class="th">ชำระเงิน</span>Checkout</h1>
+      <div id="checkout-root"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark"><img src="assets/img/Yaiya_logo.jpg" alt="" width="40" height="40" /></span><span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span></a>
+        <p>Grandma's Thai food, made by hand in small batches.</p>
+      </div>
+      <div><h5>Shop</h5><a href="shop.html#signature">Miang Kham</a><a href="shop.html#paste">Chilli Pastes</a><a href="shop.html#preserved">Fermented &amp; Preserved</a></div>
+      <div><h5>Yaiya</h5><a href="index.html#story">Our story</a><a href="index.html#process">How we make it</a></div>
+      <div><h5>Care</h5><a href="#">Shipping</a><a href="#">Storage</a><a href="#">Contact</a></div>
+    </div>
+    <div class="wrap footer-bottom"><span>© <span id="year">2026</span> Yaiya · ยายย่า.</span><span>Demo storefront — no real payment processed.</span></div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/order-service.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    (function () {
+      const root = document.getElementById("checkout-root");
+      const SHIP_FREE_OVER = 600, SHIP_COST = 60;
+
+      function orderSummary() {
+        const items = readCart();
+        const subtotal = cartSubtotal();
+        const shipping = subtotal >= SHIP_FREE_OVER ? 0 : SHIP_COST;
+        const lines = items.map((i) => {
+          const p = getProduct(i.id);
+          return `<div class="order-line"><span><span class="q">${i.qty}×</span> ${p.nameTh} <span style="color:var(--muted);font-size:var(--t-xs)">${p.name}</span></span><span>${formatTHB(p.price * i.qty)}</span></div>`;
+        }).join("");
+        return `<aside class="summary">
+          <h3>Your order</h3>
+          ${lines}
+          <div class="line" style="margin-top:0.6rem"><span>Subtotal</span><span>${formatTHB(subtotal)}</span></div>
+          <div class="line"><span>Shipping</span><span>${shipping === 0 ? "Free" : formatTHB(shipping)}</span></div>
+          <div class="line total"><span>Total</span><b>${formatTHB(subtotal + shipping)}</b></div>
+        </aside>`;
+      }
+
+      function renderForm() {
+        if (!readCart().length) {
+          root.innerHTML = `<div class="empty-state">
+            <h3>Nothing to check out yet</h3>
+            <p>Your basket is empty.</p>
+            <a class="btn btn-primary" href="shop.html">Browse the pantry</a>
+          </div>`;
+          return;
+        }
+        root.innerHTML = `
+          <form class="checkout-layout" id="co-form" novalidate>
+            <div>
+              <div class="fieldset-title">Contact</div>
+              <div class="field-row">
+                <div class="field"><label for="fname">First name <span class="req">*</span></label><input id="fname" name="fname" autocomplete="given-name" required /><span class="err">Please enter your first name.</span></div>
+                <div class="field"><label for="lname">Last name <span class="req">*</span></label><input id="lname" name="lname" autocomplete="family-name" required /><span class="err">Please enter your last name.</span></div>
+              </div>
+              <div class="field"><label for="email">Email <span class="req">*</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" required /><span class="help">We'll send your order confirmation here.</span><span class="err">Please enter a valid email address.</span></div>
+              <div class="field"><label for="phone">Phone <span class="req">*</span></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required /><span class="err">Please enter a phone number.</span></div>
+
+              <div class="fieldset-title">Shipping address</div>
+              <div class="field"><label for="addr">Address <span class="req">*</span></label><input id="addr" name="addr" autocomplete="street-address" required /><span class="err">Please enter your address.</span></div>
+              <div class="field-row">
+                <div class="field"><label for="city">City / District <span class="req">*</span></label><input id="city" name="city" autocomplete="address-level2" required /><span class="err">Please enter your city.</span></div>
+                <div class="field"><label for="zip">Postal code <span class="req">*</span></label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" required /><span class="err">Please enter your postal code.</span></div>
+              </div>
+              <div class="field"><label for="province">Province</label>
+                <select id="province" name="province" autocomplete="address-level1">
+                  <option value="Bangkok">Bangkok</option>
+                  <option value="Chiang Mai">Chiang Mai</option>
+                  <option value="Phuket">Phuket</option>
+                  <option value="Songkhla">Songkhla</option>
+                  <option value="Khon Kaen">Khon Kaen</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="fieldset-title">Payment</div>
+              <div class="field">
+                <label for="pay">Method</label>
+                <select id="pay" name="pay">
+                  <option value="promptpay">PromptPay QR</option>
+                  <option value="cod">Cash on delivery</option>
+                  <option value="card">Credit / debit card</option>
+                </select>
+              </div>
+              <p class="pay-note">This is a demonstration storefront. <strong>No payment is taken and no card details are collected.</strong> Placing the order simply shows the confirmation screen.</p>
+
+              <button class="btn btn-primary btn-block" type="submit" style="margin-top:1.4rem">Place order</button>
+            </div>
+            ${orderSummary()}
+          </form>`;
+
+        const form = document.getElementById("co-form");
+        const validators = {
+          email: (v) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v),
+          default: (v) => v.trim().length > 0
+        };
+
+        function validateField(input) {
+          const field = input.closest(".field");
+          if (!input.required) return true;
+          const fn = validators[input.id] || validators.default;
+          const ok = fn(input.value);
+          field.classList.toggle("invalid", !ok);
+          return ok;
+        }
+
+        form.querySelectorAll("input[required]").forEach((inp) => {
+          inp.addEventListener("blur", () => validateField(inp));
+          inp.addEventListener("input", () => { if (inp.closest(".field").classList.contains("invalid")) validateField(inp); });
+        });
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          let firstInvalid = null;
+          form.querySelectorAll("input[required]").forEach((inp) => {
+            if (!validateField(inp) && !firstInvalid) firstInvalid = inp;
+          });
+          if (firstInvalid) { firstInvalid.focus(); return; }
+
+          const submitBtn = form.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Placing order…";
+
+          const order = buildOrder(form);
+          submitOrder(order)
+            .catch((err) => {
+              // Non-blocking: this is a demo storefront with no real payment, so a failed
+              // capture (e.g. testing locally, where Netlify Forms isn't live) shouldn't
+              // strand the shopper. It's logged so the swap-in adapter can be debugged.
+              console.warn("Order capture failed:", err);
+            })
+            .then(() => confirmOrder(order));
+        });
+      }
+
+      /* Gathers the form + cart into one plain object — this is the shape every
+         order-service adapter (Netlify Forms today, anything else later) receives. */
+      function buildOrder(form) {
+        const items = readCart().map((i) => {
+          const p = getProduct(i.id);
+          return { id: i.id, nameTh: p.nameTh, name: p.name, qty: i.qty, price: p.price, lineTotal: p.price * i.qty };
+        });
+        const subtotal = cartSubtotal();
+        const shipping = subtotal >= SHIP_FREE_OVER ? 0 : SHIP_COST;
+        return {
+          orderNo: "YY-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
+          submittedAt: new Date().toISOString(),
+          contact: { firstName: form.fname.value.trim(), lastName: form.lname.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim() },
+          shipping: { address: form.addr.value.trim(), city: form.city.value.trim(), zip: form.zip.value.trim(), province: form.province.value },
+          payment: { method: form.pay.value },
+          items,
+          totals: { subtotal, shipping, total: subtotal + shipping }
+        };
+      }
+
+      function confirmOrder(order) {
+        const { orderNo, totals, contact } = order;
+        clearCart();
+        root.innerHTML = `
+          <div class="confirm">
+            <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <span class="eyebrow center" style="justify-content:center">Order confirmed</span>
+            <h2 class="section-title" style="margin-top:0.6rem"><span class="th">ขอบคุณค่ะ</span>Thank you${contact.firstName ? ", " + contact.firstName : ""}!</h2>
+            <p class="lede" style="margin-inline:auto">Your order <strong>${orderNo}</strong> is in. In a real store you'd get an email and a PromptPay QR — here, just our heartfelt <em>ขอบคุณ</em>.</p>
+            <div class="summary" style="max-width:360px;margin:1.6rem auto 0;text-align:left">
+              <div class="line"><span>Order</span><span>${orderNo}</span></div>
+              <div class="line total"><span>Paid</span><b>${formatTHB(totals.total)}</b></div>
+            </div>
+            <div style="display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem">
+              <a class="btn btn-primary" href="shop.html">Keep shopping</a>
+              <a class="btn btn-ghost" href="index.html">Back home</a>
+            </div>
+          </div>`;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      renderForm();
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop · Yaiya — Miang Kham, Chilli Pastes & Sauces</title>
+  <meta name="description" content="Browse Yaiya's pantry: signature miang kham sets, hand-pounded chilli pastes and palm-sugar dipping sauces. Small-batch, no preservatives." />
+  <link rel="icon" href="assets/img/Yaiya_logo.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Chonburi&family=Noto+Sans+Thai:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="index.html" aria-label="Yaiya home">
+        <span class="mark"><img src="assets/img/Yaiya_mark.png" alt="" width="40" height="40" /></span>
+        <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+      </a>
+      <nav class="nav" data-nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="shop.html" aria-current="page">Shop</a>
+        <a href="product.html?id=miang-kham-set">Miang Kham</a>
+        <a href="index.html#story">Our Story</a>
+        <a href="index.html#process">How We Make It</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="icon-btn" href="cart.html" aria-label="Your basket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="cart-count" data-cart-count hidden>0</span>
+        </a>
+        <button class="nav-toggle" data-nav-toggle aria-label="Open menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="wrap">
+        <div class="crumbs"><a href="index.html">Home</a><span>/</span><span>Shop</span></div>
+        <h1><span class="th">ครัวยายย่า</span>The pantry</h1>
+        <p>Everything we make, in one place — folded, pounded and simmered in small batches. Filter by shelf below.</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:2.4rem">
+      <div class="wrap">
+        <div class="filters" id="filters" role="group" aria-label="Filter by category">
+          <button class="chip" data-cat="all" aria-pressed="true">All</button>
+          <button class="chip" data-cat="signature" aria-pressed="false"><span class="c-th">เมี่ยงคำ</span>Miang Kham</button>
+          <button class="chip" data-cat="paste" aria-pressed="false"><span class="c-th">น้ำพริก</span>Chilli Pastes</button>
+          <button class="chip" data-cat="preserved" aria-pressed="false"><span class="c-th">ของดอง</span>Fermented & Preserved</button>
+        </div>
+        <div class="product-grid" id="shop-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="index.html">
+          <span class="mark"><img src="assets/img/Yaiya_logo.jpg" alt="" width="40" height="40" /></span>
+          <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+        </a>
+        <p>Grandma's Thai food, made by hand in small batches. Miang kham, chilli pastes and palm-sugar sauces from real Thai recipes.</p>
+      </div>
+      <div><h5>Shop</h5><a href="shop.html#signature">Miang Kham</a><a href="shop.html#paste">Chilli Pastes</a><a href="shop.html#preserved">Fermented &amp; Preserved</a><a href="shop.html">All products</a></div>
+      <div><h5>Yaiya</h5><a href="index.html#story">Our story</a><a href="index.html#process">How we make it</a><a href="index.html#anatomy">The perfect bite</a></div>
+      <div><h5>Care</h5><a href="#">Shipping</a><a href="#">Storage & freshness</a><a href="#">Contact</a></div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© <span id="year">2026</span> Yaiya · ยายย่า. Made with care in Thailand.</span>
+      <span>Demo storefront — placeholder imagery, swap in your own photos.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- NOTE (2026-08-09): 3D jar model disabled — re-enable by uncommenting the importmap
+       and jar3d.js module below, and restoring `interactive:` in products.js
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+  <script type="module" src="assets/js/jar3d.js"></script>
+  -->
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById("shop-grid");
+      const filters = document.getElementById("filters");
+
+      function heatPips(n) {
+        let s = '<span class="heat" aria-label="Heat level ' + n + ' of 3">';
+        for (let i = 1; i <= 3; i++) s += `<span class="pip ${i <= n ? "on" : ""}"></span>`;
+        return s + "</span>";
+      }
+
+      function render(cat) {
+        // release any existing 3D contexts before replacing the grid
+        grid.querySelectorAll("[data-jar3d]").forEach((el) => { if (el._jar3d) el._jar3d.stop(); });
+        const items = cat === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.category === cat || (p.categories && p.categories.includes(cat)));
+        grid.innerHTML = items.map((p, i) => {
+          const badge = p.category === "signature" ? '<span class="badge">Signature</span>' : "";
+          return `<article class="product-card" data-reveal data-reveal-delay="${(i % 4) * 80}">
+            <a class="product-media" href="product.html?id=${p.id}" aria-label="${p.name}">${badge}${productThumb(p)}</a>
+            <div class="product-body">
+              <a href="product.html?id=${p.id}"><span class="p-th">${p.nameTh}</span></a>
+              <span class="p-en">${p.name}</span>
+              <p class="p-blurb-th">${p.taglineTh}</p>
+              <p class="p-blurb">${p.tagline}</p>
+              <div style="display:flex;align-items:center;gap:0.6rem;margin:0.1rem 0 0.4rem">${heatPips(p.heat)}<span style="font-size:var(--t-xs);color:var(--muted)">${p.weight}</span></div>
+              <div class="product-foot">
+                <span class="price">${formatTHB(p.price)}</span>
+                <button class="add-btn" data-add="${p.id}" aria-label="Add ${p.name} to basket">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>`;
+        }).join("");
+        // mount any 3D jar previews
+        grid.querySelectorAll("[data-jar3d]").forEach((el) => {
+          if (window.initJar3D) window.initJar3D(el, { label: el.dataset.label || undefined, fallback: el.dataset.fallback || undefined });
+        });
+        // re-trigger reveal for freshly rendered cards
+        if (window.IntersectionObserver) {
+          const io = new IntersectionObserver((es, o) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); o.unobserve(e.target); } }), { threshold: 0.1 });
+          grid.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+        } else {
+          grid.querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("in"));
+        }
+      }
+
+      filters.addEventListener("click", (e) => {
+        const chip = e.target.closest(".chip");
+        if (!chip) return;
+        filters.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", "false"));
+        chip.setAttribute("aria-pressed", "true");
+        render(chip.dataset.cat);
+        history.replaceState(null, "", chip.dataset.cat === "all" ? "shop.html" : "#" + chip.dataset.cat);
+      });
+
+      grid.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-add]");
+        if (b) addToCart(b.dataset.add);
+      });
+
+      // honour deep-link hash (#signature / #paste / #preserved)
+      const hash = location.hash.replace("#", "");
+      const valid = ["signature", "paste", "preserved"];
+      const start = valid.includes(hash) ? hash : "all";
+      const startChip = filters.querySelector(`[data-cat="${start}"]`);
+      filters.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", "false"));
+      startChip.setAttribute("aria-pressed", "true");
+      render(start);
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+
