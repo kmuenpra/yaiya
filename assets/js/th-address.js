@@ -3,9 +3,11 @@
    trimmed from kongvut/thai-province-data, MIT). Loaded once and cached.
 
    Usage: initThaiAddress({ provinceSelect, districtInput, districtList, subInput, subList, zipInput })
-   Wires up: picking a province narrows the district datalist; picking a district narrows the
-   subdistrict datalist; picking a subdistrict auto-fills district, province and zip code.
-   Everything still stays a plain, editable text input — nothing is locked. */
+   Wires up: picking a zip/province/district/subdistrict cross-fills the others wherever the
+   data uniquely allows it. Everything stays a plain, editable field — nothing is locked.
+   Every programmatic fill goes through setVal(), which dispatches a real "input" event —
+   that's what lets checkout.html's progressive step-reveal react to auto-filled fields, not
+   just fields the user typed into directly. */
 
 const THAI_ADDRESS_DATA_URL = "assets/data/th-address.json";
 let _thaiAddressPromise = null;
@@ -45,6 +47,15 @@ function matchByLabel(value, pool) {
   const v = value.trim();
   if (!v) return null;
   return pool.find((r) => thLabel(r) === v) || null;
+}
+
+/* Sets a field's value and dispatches a real "input" event — but only when the value is
+   actually changing. That guard is what stops the district/subdistrict/province/zip
+   cross-fills from re-triggering each other forever once they've all converged. */
+function setVal(el, val) {
+  if (el.value === val) return;
+  el.value = val;
+  el.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
 async function initThaiAddress(fields) {
@@ -89,7 +100,7 @@ async function initThaiAddress(fields) {
     const pool = districtsFor(provinceSelect.value);
     const match = matchByLabel(districtInput.value, pool.length ? pool : data.districts);
     if (!match) return;
-    provinceSelect.value = String(match.province_id);
+    setVal(provinceSelect, String(match.province_id));
     refreshDistrictList();
     if (!matchByLabel(subInput.value, subsFor(match.id))) {
       subInput.value = "";
@@ -106,12 +117,12 @@ async function initThaiAddress(fields) {
     if (!match) return;
     const district = data.districtsById.get(match.district_id);
     if (district) {
-      districtInput.value = thLabel(district);
-      provinceSelect.value = String(district.province_id);
+      setVal(districtInput, thLabel(district));
+      setVal(provinceSelect, String(district.province_id));
       refreshDistrictList();
       refreshSubList(district.id);
     }
-    zipInput.value = match.zip;
+    setVal(zipInput, String(match.zip));
   });
 
   // Typing a 5-digit zip that uniquely identifies one subdistrict fills in the rest too.
@@ -122,10 +133,10 @@ async function initThaiAddress(fields) {
     if (matches.length !== 1) return;
     const [sub] = matches;
     const district = data.districtsById.get(sub.district_id);
-    subInput.value = thLabel(sub);
+    setVal(subInput, thLabel(sub));
     if (district) {
-      districtInput.value = thLabel(district);
-      provinceSelect.value = String(district.province_id);
+      setVal(districtInput, thLabel(district));
+      setVal(provinceSelect, String(district.province_id));
       refreshDistrictList();
       refreshSubList(district.id);
     }

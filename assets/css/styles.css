@@ -367,6 +367,16 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .fieldset-title { font-family: var(--f-display); color: var(--betel); font-size: var(--t-xl); margin: 1.6rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--line); }
 .fieldset-title:first-child { margin-top: 0; }
 .pay-note { font-size: var(--t-xs); color: var(--muted); background: var(--rice-deep); border-radius: var(--r-sm); padding: 0.8rem 1rem; margin-top: 0.5rem; }
+
+/* Progressive shipping-address reveal (zip → province → district → subdistrict → address) */
+.field.step-hidden { display: none; }
+
+/* PromptPay QR + bilingual payment warning */
+.promptpay-block { display: grid; justify-items: center; gap: 0.8rem; background: var(--rice-deep); border: 1px solid var(--line); border-radius: var(--r-md); padding: 1.2rem; margin-top: 0.8rem; text-align: center; }
+.promptpay-block[hidden] { display: none; }
+.promptpay-qr { width: min(220px, 60%); border-radius: var(--r-sm); box-shadow: var(--shadow-sm); }
+.promptpay-warning { font-size: var(--t-sm); color: var(--chili-deep); line-height: 1.6; margin: 0; }
+.promptpay-warning strong { color: var(--chili); }
 .order-line { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem 0; font-size: var(--t-sm); }
 .order-line .q { color: var(--muted); }
 .confirm { text-align: center; max-width: 560px; margin: 0 auto; padding: 2rem 0; }
