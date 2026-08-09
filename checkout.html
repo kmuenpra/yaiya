@@ -88,6 +88,10 @@
   <script src="assets/js/cart.js"></script>
   <script src="assets/js/order-service.js"></script>
   <script src="assets/js/th-address.js"></script>
+  <!-- NOTE: card payments not wired in yet — see assets/js/payment-service.js and
+       netlify/functions/create-charge.js for the scaffolding + activation steps.
+  <script src="assets/js/payment-service.js"></script>
+  -->
   <script src="assets/js/main.js"></script>
   <script>
     (function () {
@@ -167,8 +171,9 @@
                 <label for="pay">วิธีการชำระเงิน / Method</label>
                 <select id="pay" name="pay">
                   <option value="promptpay">PromptPay QR</option>
-                  <!-- NOTE: "Cash on delivery" removed and "Credit / debit card" hidden until a
-                       real payment gateway is wired in (see order-service.js-style adapter notes).
+                  <!-- NOTE: "Cash on delivery" removed. "Credit / debit card" hidden until a real
+                       processor is wired in — see assets/js/payment-service.js and
+                       netlify/functions/create-charge.js for the scaffolding + activation steps.
                        Re-add as: <option value="card">Credit / debit card</option> -->
                 </select>
               </div>
