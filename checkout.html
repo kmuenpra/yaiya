@@ -41,7 +41,7 @@
        Netlify Forms only detects forms present in the raw HTML, not ones rendered by JS.
        Field names here must match what order-service.js's "netlify" adapter POSTs. Only used
        while ACTIVE_ADAPTER === "netlify" in assets/js/order-service.js; harmless otherwise. -->
-  <form name="order" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <form name="order" data-netlify="true" netlify-honeypot="bot-field" style="display: none">
     <input type="text" name="order-no" />
     <input type="text" name="first-name" />
     <input type="text" name="last-name" />
