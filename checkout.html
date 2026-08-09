@@ -48,9 +48,10 @@
     <input type="email" name="email" />
     <input type="tel" name="phone" />
     <input type="text" name="address" />
-    <input type="text" name="city" />
-    <input type="text" name="zip" />
+    <input type="text" name="subdistrict" />
+    <input type="text" name="district" />
     <input type="text" name="province" />
+    <input type="text" name="zip" />
     <input type="text" name="payment-method" />
     <input type="text" name="subtotal" />
     <input type="text" name="shipping" />
@@ -86,6 +87,7 @@
   <script src="assets/js/products.js"></script>
   <script src="assets/js/cart.js"></script>
   <script src="assets/js/order-service.js"></script>
+  <script src="assets/js/th-address.js"></script>
   <script src="assets/js/main.js"></script>
   <script>
     (function () {
@@ -101,7 +103,7 @@
           return `<div class="order-line"><span><span class="q">${i.qty}×</span> ${p.nameTh} <span style="color:var(--muted);font-size:var(--t-xs)">${p.name}</span></span><span>${formatTHB(p.price * i.qty)}</span></div>`;
         }).join("");
         return `<aside class="summary">
-          <h3>Your order</h3>
+          <h3>คำสั่งซื้อของคุณ / Your order</h3>
           ${lines}
           <div class="line" style="margin-top:0.6rem"><span>Subtotal</span><span>${formatTHB(subtotal)}</span></div>
           <div class="line"><span>Shipping</span><span>${shipping === 0 ? "Free" : formatTHB(shipping)}</span></div>
@@ -121,34 +123,33 @@
         root.innerHTML = `
           <form class="checkout-layout" id="co-form" novalidate>
             <div>
-              <div class="fieldset-title">Contact</div>
+              <div class="fieldset-title">ติดต่อ / Contact</div>
               <div class="field-row">
-                <div class="field"><label for="fname">First name <span class="req">*</span></label><input id="fname" name="fname" autocomplete="given-name" required /><span class="err">Please enter your first name.</span></div>
-                <div class="field"><label for="lname">Last name <span class="req">*</span></label><input id="lname" name="lname" autocomplete="family-name" required /><span class="err">Please enter your last name.</span></div>
+                <div class="field"><label for="fname">ชื่อ / First name <span class="req">*</span></label><input id="fname" name="fname" autocomplete="given-name" required /><span class="err">Please enter your first name.</span></div>
+                <div class="field"><label for="lname">นามสกุล / Last name <span class="req">*</span></label><input id="lname" name="lname" autocomplete="family-name" required /><span class="err">Please enter your last name.</span></div>
               </div>
-              <div class="field"><label for="email">Email <span class="req">*</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" required /><span class="help">We'll send your order confirmation here.</span><span class="err">Please enter a valid email address.</span></div>
-              <div class="field"><label for="phone">Phone <span class="req">*</span></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required /><span class="err">Please enter a phone number.</span></div>
+              <div class="field"><label for="email">อีเมล / Email <span class="req">*</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" required /><span class="help">We'll send your order confirmation here.</span><span class="err">Please enter a valid email address.</span></div>
+              <div class="field"><label for="phone">เบอร์โทรศัพท์ / Phone <span class="req">*</span></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required /><span class="err">Please enter a phone number.</span></div>
 
-              <div class="fieldset-title">Shipping address</div>
-              <div class="field"><label for="addr">Address <span class="req">*</span></label><input id="addr" name="addr" autocomplete="street-address" required /><span class="err">Please enter your address.</span></div>
+              <div class="fieldset-title">ที่อยู่จัดส่ง / Shipping address</div>
+              <div class="field"><label for="addr">ที่อยู่ (บ้านเลขที่ ถนน ซอย) / Address <span class="req">*</span></label><input id="addr" name="addr" autocomplete="street-address" required /><span class="err">Please enter your address.</span></div>
               <div class="field-row">
-                <div class="field"><label for="city">City / District <span class="req">*</span></label><input id="city" name="city" autocomplete="address-level2" required /><span class="err">Please enter your city.</span></div>
-                <div class="field"><label for="zip">Postal code <span class="req">*</span></label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" required /><span class="err">Please enter your postal code.</span></div>
+                <div class="field"><label for="subdistrict">ตำบล/แขวง / Subdistrict <span class="req">*</span></label><input id="subdistrict" name="subdistrict" list="subdistrict-options" autocomplete="off" required /><datalist id="subdistrict-options"></datalist><span class="err">Please enter your subdistrict.</span></div>
+                <div class="field"><label for="district">อำเภอ/เขต / District <span class="req">*</span></label><input id="district" name="district" list="district-options" autocomplete="off" required /><datalist id="district-options"></datalist><span class="err">Please enter your district.</span></div>
               </div>
-              <div class="field"><label for="province">Province</label>
-                <select id="province" name="province" autocomplete="address-level1">
-                  <option value="Bangkok">Bangkok</option>
-                  <option value="Chiang Mai">Chiang Mai</option>
-                  <option value="Phuket">Phuket</option>
-                  <option value="Songkhla">Songkhla</option>
-                  <option value="Khon Kaen">Khon Kaen</option>
-                  <option value="Other">Other</option>
-                </select>
+              <div class="field-row">
+                <div class="field"><label for="province">จังหวัด / Province <span class="req">*</span></label>
+                  <select id="province" name="province" autocomplete="address-level1" required>
+                    <option value="">-- เลือกจังหวัด / Select province --</option>
+                  </select>
+                  <span class="err">Please select your province.</span>
+                </div>
+                <div class="field"><label for="zip">รหัสไปรษณีย์ / Postal code <span class="req">*</span></label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" required /><span class="help">Auto-fills once you pick a subdistrict.</span><span class="err">Please enter your postal code.</span></div>
               </div>
 
-              <div class="fieldset-title">Payment</div>
+              <div class="fieldset-title">การชำระเงิน / Payment</div>
               <div class="field">
-                <label for="pay">Method</label>
+                <label for="pay">วิธีการชำระเงิน / Method</label>
                 <select id="pay" name="pay">
                   <option value="promptpay">PromptPay QR</option>
                   <option value="cod">Cash on delivery</option>
@@ -163,6 +164,15 @@
           </form>`;
 
         const form = document.getElementById("co-form");
+        initThaiAddress({
+          provinceSelect: form.province,
+          districtInput: form.district,
+          districtList: document.getElementById("district-options"),
+          subInput: form.subdistrict,
+          subList: document.getElementById("subdistrict-options"),
+          zipInput: form.zip
+        });
+
         const validators = {
           email: (v) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v),
           default: (v) => v.trim().length > 0
@@ -177,15 +187,16 @@
           return ok;
         }
 
-        form.querySelectorAll("input[required]").forEach((inp) => {
+        form.querySelectorAll("input[required], select[required]").forEach((inp) => {
           inp.addEventListener("blur", () => validateField(inp));
           inp.addEventListener("input", () => { if (inp.closest(".field").classList.contains("invalid")) validateField(inp); });
+          inp.addEventListener("change", () => { if (inp.closest(".field").classList.contains("invalid")) validateField(inp); });
         });
 
         form.addEventListener("submit", (e) => {
           e.preventDefault();
           let firstInvalid = null;
-          form.querySelectorAll("input[required]").forEach((inp) => {
+          form.querySelectorAll("input[required], select[required]").forEach((inp) => {
             if (!validateField(inp) && !firstInvalid) firstInvalid = inp;
           });
           if (firstInvalid) { firstInvalid.focus(); return; }
@@ -219,7 +230,13 @@
           orderNo: "YY-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
           submittedAt: new Date().toISOString(),
           contact: { firstName: form.fname.value.trim(), lastName: form.lname.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim() },
-          shipping: { address: form.addr.value.trim(), city: form.city.value.trim(), zip: form.zip.value.trim(), province: form.province.value },
+          shipping: {
+            address: form.addr.value.trim(),
+            subdistrict: form.subdistrict.value.trim(),
+            district: form.district.value.trim(),
+            province: form.province.options[form.province.selectedIndex]?.text || "",
+            zip: form.zip.value.trim()
+          },
           payment: { method: form.pay.value },
           items,
           totals: { subtotal, shipping, total: subtotal + shipping }
