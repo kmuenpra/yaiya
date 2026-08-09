@@ -147,6 +147,27 @@ const PRODUCTS = [
     story:
       "Freshwater fish is salted and fermented for months until it turns rich, funky and intensely savoury. A nutritional powerhouse — high in protein, B-vitamins and calcium — it's the soul of som tam, nam prik and countless Isaan dishes.",
     components: []
+  },
+  {
+    // NOTE: added for testing the cart/checkout flow end-to-end on the live Netlify site.
+    // Safe to delete once checkout testing is done — it's not linked from any featured list.
+    id: "test-product",
+    name: "Test Product",
+    nameTh: "สินค้าทดสอบ",
+    category: "preserved",
+    price: 0,
+    weight: "1 unit",
+    heat: 0,
+    image: "assets/img/Yaiya_logo.jpg",
+    infographic: null,
+    taglineTh: "สำหรับทดสอบระบบตะกร้าและการชำระเงินเท่านั้น",
+    tagline: "For testing cart & checkout only",
+    blurb: "A free placeholder item used to test the cart and checkout flow end-to-end.",
+    storyTh:
+      "รายการนี้สร้างขึ้นเพื่อทดสอบระบบตะกร้าและการชำระเงินเท่านั้น ไม่ใช่สินค้าจริงที่มีขาย",
+    story:
+      "This is a free placeholder item used to verify the cart and checkout flow end-to-end. It isn't a real product for sale.",
+    components: []
   }
 ];
 
