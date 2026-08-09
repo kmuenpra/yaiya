@@ -133,16 +133,11 @@
 
               <div class="fieldset-title">ที่อยู่จัดส่ง / Shipping address</div>
               <div class="field">
-                <label for="zip">รหัสไปรษณีย์ / Postal code <span class="req">*</span></label>
-                <input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" required />
-                <span class="help">กรอกก่อนเพื่อช่วยเติมข้อมูลที่เหลือ / Start here — we'll help fill in the rest.</span>
-                <span class="err">Please enter your postal code.</span>
-              </div>
-              <div class="field step step-hidden" id="step-province">
                 <label for="province">จังหวัด / Province <span class="req">*</span></label>
                 <select id="province" name="province" autocomplete="address-level1" required>
                   <option value="">-- เลือกจังหวัด / Select province --</option>
                 </select>
+                <span class="help">เลือกก่อนเพื่อช่วยเติมข้อมูลที่เหลือ / Start here — we'll help fill in the rest.</span>
                 <span class="err">Please select your province.</span>
               </div>
               <div class="field step step-hidden" id="step-district">
@@ -154,6 +149,12 @@
                 <label for="subdistrict">ตำบล/แขวง / Subdistrict <span class="req">*</span></label>
                 <input id="subdistrict" name="subdistrict" list="subdistrict-options" autocomplete="off" required /><datalist id="subdistrict-options"></datalist>
                 <span class="err">Please enter your subdistrict.</span>
+              </div>
+              <div class="field step step-hidden" id="step-zip">
+                <label for="zip">รหัสไปรษณีย์ / Postal code <span class="req">*</span></label>
+                <input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" required />
+                <span class="help">เติมให้อัตโนมัติจากตำบล/แขวงที่เลือก / Auto-filled from your subdistrict — still editable.</span>
+                <span class="err">Please enter your postal code.</span>
               </div>
               <div class="field step step-hidden" id="step-address">
                 <label for="addr">ที่อยู่ (บ้านเลขที่ ถนน ซอย) / Address <span class="req">*</span></label>
@@ -241,29 +242,30 @@
         });
       }
 
-      /* Zip → Province → District → Subdistrict → Address: each step stays hidden until the
-         one before it has a value, then it's revealed for good — including when th-address.js
-         auto-fills a field programmatically (it dispatches "input" for exactly this reason).
-         Once revealed, every earlier field stays fully editable; nothing re-hides. */
+      /* Province → District → Subdistrict → Zip (auto-filled from subdistrict) → Address:
+         each step stays hidden until the one before it has a value, then it's revealed for
+         good — including when th-address.js auto-fills a field programmatically (it dispatches
+         "input" for exactly this reason). Once revealed, every earlier field stays fully
+         editable; nothing re-hides. */
       function wireProgressiveReveal(form) {
         const steps = {
-          province: document.getElementById("step-province"),
           district: document.getElementById("step-district"),
           subdistrict: document.getElementById("step-subdistrict"),
+          zip: document.getElementById("step-zip"),
           address: document.getElementById("step-address")
         };
         const reveal = (el) => el.classList.remove("step-hidden");
 
-        form.zip.addEventListener("input", () => { if (/^\d{5}$/.test(form.zip.value.trim())) reveal(steps.province); });
         form.province.addEventListener("input", () => { if (form.province.value) reveal(steps.district); });
         form.district.addEventListener("input", () => { if (form.district.value.trim()) reveal(steps.subdistrict); });
-        form.subdistrict.addEventListener("input", () => { if (form.subdistrict.value.trim()) reveal(steps.address); });
+        form.subdistrict.addEventListener("input", () => { if (form.subdistrict.value.trim()) reveal(steps.zip); });
+        form.zip.addEventListener("input", () => { if (form.zip.value.trim()) reveal(steps.address); });
 
         // In case the browser already had values filled in (e.g. autofill) before we attached these.
-        if (/^\d{5}$/.test(form.zip.value.trim())) reveal(steps.province);
         if (form.province.value) reveal(steps.district);
         if (form.district.value.trim()) reveal(steps.subdistrict);
-        if (form.subdistrict.value.trim()) reveal(steps.address);
+        if (form.subdistrict.value.trim()) reveal(steps.zip);
+        if (form.zip.value.trim()) reveal(steps.address);
       }
 
       /* Shows the PromptPay QR + bilingual payment warning only while that method is selected
