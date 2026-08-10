@@ -1,13 +1,17 @@
-/* Yaiya — Thailand address autofill.
+/* Yaiya — Thailand address picker.
    Data: assets/data/th-address.json (provinces/districts/subdistricts + zip codes,
    trimmed from kongvut/thai-province-data, MIT). Loaded once and cached.
 
-   Usage: initThaiAddress({ provinceSelect, districtInput, districtList, subInput, subList, zipInput })
-   Wires up: picking a zip/province/district/subdistrict cross-fills the others wherever the
-   data uniquely allows it. Everything stays a plain, editable field — nothing is locked.
-   Every programmatic fill goes through setVal(), which dispatches a real "input" event —
-   that's what lets checkout.html's progressive step-reveal react to auto-filled fields, not
-   just fields the user typed into directly. */
+   Usage: initThaiAddress({ provinceSelect, districtSelect, subSelect, zipInput })
+
+   Three linked <select> dropdowns — province → district (อำเภอ/เขต) → subdistrict (ตำบล/แขวง)
+   — each populated from the one before it, with the postal code filled in automatically once
+   a subdistrict is chosen. Selects (rather than <input list="...">/<datalist>) because mobile
+   browsers handle datalist inconsistently: on several Android/iOS browsers the suggestion list
+   never appears, leaving what looks like a plain text box with 7,000-odd valid answers.
+
+   Every programmatic change goes through setVal(), which fires a real "input" event — that's
+   what lets checkout.html's progressive step-reveal react to fields it didn't type into. */
 
 const THAI_ADDRESS_DATA_URL = "assets/data/th-address.json";
 let _thaiAddressPromise = null;
@@ -17,8 +21,6 @@ function loadThaiAddressData() {
     _thaiAddressPromise = fetch(THAI_ADDRESS_DATA_URL)
       .then((res) => { if (!res.ok) throw new Error(`Failed to load ${THAI_ADDRESS_DATA_URL} (${res.status})`); return res.json(); })
       .then((data) => {
-        const provincesById = new Map(data.provinces.map((p) => [p.id, p]));
-        const districtsById = new Map(data.districts.map((d) => [d.id, d]));
         const districtsByProvince = new Map();
         data.districts.forEach((d) => {
           if (!districtsByProvince.has(d.province_id)) districtsByProvince.set(d.province_id, []);
@@ -29,29 +31,25 @@ function loadThaiAddressData() {
           if (!subsByDistrict.has(s.district_id)) subsByDistrict.set(s.district_id, []);
           subsByDistrict.get(s.district_id).push(s);
         });
-        return { ...data, provincesById, districtsById, districtsByProvince, subsByDistrict };
+        const subsById = new Map(data.subdistricts.map((s) => [s.id, s]));
+        return { ...data, districtsByProvince, subsByDistrict, subsById };
       });
   }
   return _thaiAddressPromise;
 }
 
 const thLabel = (rec) => `${rec.th} (${rec.en})`;
+const byThaiName = (a, b) => a.th.localeCompare(b.th, "th");
 
-function fillDatalist(listEl, records) {
-  listEl.innerHTML = records.map((r) => `<option value="${thLabel(r).replace(/"/g, "&quot;")}"></option>`).join("");
+/* Rebuilds a dropdown. Disabled while empty, so it reads as "not ready yet" rather than
+   looking like a working control with nothing in it. */
+function fillSelect(sel, records, placeholder) {
+  const opts = records.map((r) => `<option value="${r.id}">${thLabel(r)}</option>`).join("");
+  sel.innerHTML = `<option value="">${placeholder}</option>${opts}`;
+  sel.value = "";
+  sel.disabled = records.length === 0;
 }
 
-/* Finds the record whose "Thai (English)" label exactly matches the input's current value,
-   scoped to `pool` when given (keeps duplicate place-names across provinces from colliding). */
-function matchByLabel(value, pool) {
-  const v = value.trim();
-  if (!v) return null;
-  return pool.find((r) => thLabel(r) === v) || null;
-}
-
-/* Sets a field's value and dispatches a real "input" event — but only when the value is
-   actually changing. That guard is what stops the district/subdistrict/province/zip
-   cross-fills from re-triggering each other forever once they've all converged. */
 function setVal(el, val) {
   if (el.value === val) return;
   el.value = val;
@@ -59,88 +57,42 @@ function setVal(el, val) {
 }
 
 async function initThaiAddress(fields) {
-  const { provinceSelect, districtInput, districtList, subInput, subList, zipInput } = fields;
+  const { provinceSelect, districtSelect, subSelect, zipInput } = fields;
   const data = await loadThaiAddressData();
 
-  const sortedProvinces = [...data.provinces].sort((a, b) => a.th.localeCompare(b.th, "th"));
-  provinceSelect.innerHTML =
-    '<option value="">-- เลือกจังหวัด / Select province --</option>' +
-    sortedProvinces.map((p) => `<option value="${p.id}">${p.th} (${p.en})</option>`).join("");
+  const PLACEHOLDER = {
+    province: "-- เลือกจังหวัด / Select province --",
+    district: "-- เลือกอำเภอ/เขต / Select district --",
+    sub: "-- เลือกตำบล/แขวง / Select subdistrict --"
+  };
 
-  function districtsFor(provinceId) {
-    return provinceId ? (data.districtsByProvince.get(+provinceId) || []) : data.districts;
-  }
-  function subsFor(districtId) {
-    return districtId ? (data.subsByDistrict.get(+districtId) || []) : [];
-  }
+  fillSelect(provinceSelect, [...data.provinces].sort(byThaiName), PLACEHOLDER.province);
+  fillSelect(districtSelect, [], PLACEHOLDER.district);
+  fillSelect(subSelect, [], PLACEHOLDER.sub);
 
-  function refreshDistrictList() {
-    fillDatalist(districtList, districtsFor(provinceSelect.value));
-  }
-  function refreshSubList(districtId) {
-    fillDatalist(subList, subsFor(districtId));
-  }
-
-  // Province chosen directly → narrow the district options; clear any district/subdistrict/zip
-  // that no longer matches the new province, so nothing stale is left behind silently.
+  // Province chosen → load its districts, and clear anything downstream that no longer applies
   provinceSelect.addEventListener("change", () => {
-    const stillValid = matchByLabel(districtInput.value, districtsFor(provinceSelect.value));
-    if (!stillValid) {
-      districtInput.value = "";
-      subInput.value = "";
-      zipInput.value = "";
-      fillDatalist(subList, []);
-    }
-    refreshDistrictList();
+    const districts = provinceSelect.value
+      ? [...(data.districtsByProvince.get(+provinceSelect.value) || [])].sort(byThaiName)
+      : [];
+    fillSelect(districtSelect, districts, PLACEHOLDER.district);
+    fillSelect(subSelect, [], PLACEHOLDER.sub);
+    setVal(zipInput, "");
   });
 
-  // District typed/selected → if it's an exact match, auto-fill province + narrow subdistricts
-  // (clearing the subdistrict/zip if they belonged to a different district).
-  districtInput.addEventListener("input", () => {
-    const pool = districtsFor(provinceSelect.value);
-    const match = matchByLabel(districtInput.value, pool.length ? pool : data.districts);
-    if (!match) return;
-    setVal(provinceSelect, String(match.province_id));
-    refreshDistrictList();
-    if (!matchByLabel(subInput.value, subsFor(match.id))) {
-      subInput.value = "";
-      zipInput.value = "";
-    }
-    refreshSubList(match.id);
+  // District chosen → load its subdistricts
+  districtSelect.addEventListener("change", () => {
+    const subs = districtSelect.value
+      ? [...(data.subsByDistrict.get(+districtSelect.value) || [])].sort(byThaiName)
+      : [];
+    fillSelect(subSelect, subs, PLACEHOLDER.sub);
+    setVal(zipInput, "");
   });
 
-  // Subdistrict typed/selected → the seamless part: auto-fill district, province and zip.
-  subInput.addEventListener("input", () => {
-    const currentDistrict = matchByLabel(districtInput.value, districtsFor(provinceSelect.value));
-    const scoped = currentDistrict ? subsFor(currentDistrict.id) : data.subdistricts;
-    const match = matchByLabel(subInput.value, scoped);
-    if (!match) return;
-    const district = data.districtsById.get(match.district_id);
-    if (district) {
-      setVal(districtInput, thLabel(district));
-      setVal(provinceSelect, String(district.province_id));
-      refreshDistrictList();
-      refreshSubList(district.id);
-    }
-    setVal(zipInput, String(match.zip));
+  // Subdistrict chosen → that pins down the postal code (still editable, for the rare
+  // subdistrict that spans more than one)
+  subSelect.addEventListener("change", () => {
+    const sub = subSelect.value ? data.subsById.get(+subSelect.value) : null;
+    setVal(zipInput, sub ? String(sub.zip) : "");
   });
-
-  // Typing a 5-digit zip that uniquely identifies one subdistrict fills in the rest too.
-  zipInput.addEventListener("input", () => {
-    const v = zipInput.value.trim();
-    if (!/^\d{5}$/.test(v)) return;
-    const matches = data.subdistricts.filter((s) => String(s.zip) === v);
-    if (matches.length !== 1) return;
-    const [sub] = matches;
-    const district = data.districtsById.get(sub.district_id);
-    setVal(subInput, thLabel(sub));
-    if (district) {
-      setVal(districtInput, thLabel(district));
-      setVal(provinceSelect, String(district.province_id));
-      refreshDistrictList();
-      refreshSubList(district.id);
-    }
-  });
-
-  refreshDistrictList();
 }

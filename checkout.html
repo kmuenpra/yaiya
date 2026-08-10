@@ -155,13 +155,17 @@
               </div>
               <div class="field step step-hidden" id="step-district">
                 <label for="district">อำเภอ/เขต / District <span class="req">*</span></label>
-                <input id="district" name="district" list="district-options" autocomplete="off" required /><datalist id="district-options"></datalist>
-                <span class="err">Please enter your district.</span>
+                <select id="district" name="district" autocomplete="address-level2" required disabled>
+                  <option value="">-- เลือกอำเภอ/เขต / Select district --</option>
+                </select>
+                <span class="err">Please select your district.</span>
               </div>
               <div class="field step step-hidden" id="step-subdistrict">
                 <label for="subdistrict">ตำบล/แขวง / Subdistrict <span class="req">*</span></label>
-                <input id="subdistrict" name="subdistrict" list="subdistrict-options" autocomplete="off" required /><datalist id="subdistrict-options"></datalist>
-                <span class="err">Please enter your subdistrict.</span>
+                <select id="subdistrict" name="subdistrict" autocomplete="address-level3" required disabled>
+                  <option value="">-- เลือกตำบล/แขวง / Select subdistrict --</option>
+                </select>
+                <span class="err">Please select your subdistrict.</span>
               </div>
               <div class="field step step-hidden" id="step-zip">
                 <label for="zip">รหัสไปรษณีย์ / Postal code <span class="req">*</span></label>
@@ -203,10 +207,8 @@
         const form = document.getElementById("co-form");
         initThaiAddress({
           provinceSelect: form.province,
-          districtInput: form.district,
-          districtList: document.getElementById("district-options"),
-          subInput: form.subdistrict,
-          subList: document.getElementById("subdistrict-options"),
+          districtSelect: form.district,
+          subSelect: form.subdistrict,
           zipInput: form.zip
         });
         wireProgressiveReveal(form);
@@ -234,11 +236,22 @@
 
         form.addEventListener("submit", (e) => {
           e.preventDefault();
+          // Reveal every address step first: otherwise a required field can still be hidden
+          // behind the progressive reveal and focusing it would do nothing visible.
+          form.querySelectorAll(".field.step-hidden").forEach((el) => el.classList.remove("step-hidden"));
+
           let firstInvalid = null;
           form.querySelectorAll("input[required], select[required]").forEach((inp) => {
             if (!validateField(inp) && !firstInvalid) firstInvalid = inp;
           });
-          if (firstInvalid) { firstInvalid.focus(); return; }
+          if (firstInvalid) {
+            // a disabled dropdown can't take focus — send them to the province, which is what
+            // unlocks it — and scroll it into view for small screens
+            const target = firstInvalid.disabled ? form.province : firstInvalid;
+            target.focus({ preventScroll: true });
+            target.scrollIntoView({ block: "center", behavior: "smooth" });
+            return;
+          }
 
           const submitBtn = form.querySelector('button[type="submit"]');
           submitBtn.disabled = true;
@@ -291,6 +304,9 @@
         sync();
       }
 
+      // "" when nothing is picked, so the placeholder row never leaks into an order
+      const selectedText = (sel) => (sel.value ? sel.options[sel.selectedIndex].text : "");
+
       /* Gathers the form + cart into one plain object — this is the shape every
          order-service adapter (Netlify Forms today, anything else later) receives. */
       function buildOrder(form) {
@@ -306,9 +322,10 @@
           contact: { firstName: form.fname.value.trim(), lastName: form.lname.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim() },
           shipping: {
             address: form.addr.value.trim(),
-            subdistrict: form.subdistrict.value.trim(),
-            district: form.district.value.trim(),
-            province: form.province.options[form.province.selectedIndex]?.text || "",
+            // the dropdowns carry numeric ids as values — the order needs the readable name
+            subdistrict: selectedText(form.subdistrict),
+            district: selectedText(form.district),
+            province: selectedText(form.province),
             zip: form.zip.value.trim()
           },
           payment: { method: form.pay.value },

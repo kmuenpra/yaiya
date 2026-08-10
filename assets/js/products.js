@@ -37,7 +37,7 @@ const MIANG_KHAM_INTERACTIVE = {
 /* Pickled Ginger — a spinning jar model; "ingredients" here are its health benefits (from ginger_graphic.jpg). */
 const KHING_DONG_INTERACTIVE = {
   model: "jar",
-  label: "Pickled Ginger",
+  label: "Apple-Cider Pickled Ginger",
   jar: "assets/img/products/khing-dong/khing-dong-nobackground.png",
   model3d: "assets/3D-model/Home_2K_00002_.glb",
   label3d: "assets/img/products/khing-dong/khing-dong-label.jpg",
@@ -108,8 +108,8 @@ const PRODUCTS = [
   },
   {
     id: "khing-dong",
-    name: "Pickled Ginger",
-    nameTh: "ขิงดอง",
+    name: "Apple-Cider Pickled Ginger",
+    nameTh: "ขิงดองแอปเปิ้ลไซเดอร์",
     category: "preserved",
     price: 160,
     weight: "240 g jar",
