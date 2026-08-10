@@ -14,10 +14,16 @@
 <body>
   <header class="site-header">
     <div class="wrap nav-bar">
-      <a class="brand" href="index.html" aria-label="Yaiya home">
-        <span class="mark"><img src="assets/img/Yaiya_mark.png" alt="" width="40" height="40" /></span>
-        <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
-      </a>
+      <div class="brand-cluster">
+        <a class="brand" href="index.html" aria-label="Yaiya home">
+          <span class="mark"><img src="assets/img/Yaiya_mark.png" alt="" width="40" height="40" /></span>
+          <span class="brand-name"><span class="th">ยายย่า</span><span class="en">Yaiya</span></span>
+        </a>
+        <a class="nav-phone" href="tel:+66836356354" aria-label="โทรหาเรา / Call us on 083-635-6354">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.2.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.2 2.2Z"/></svg>
+          <span>083-635-6354</span>
+        </a>
+      </div>
       <nav class="nav" data-nav aria-label="Primary">
         <a href="index.html" aria-current="page">Home</a>
         <a href="shop.html">Shop</a>
@@ -44,15 +50,16 @@
         <div class="hero-copy">
           <span class="eyebrow">ยายย่า · Grandma's Thai Food</span>
           <h1><span class="th">เมี่ยงคำ</span>One leaf. <em>One perfect bite.</em></h1>
-          <p>We are named for our grandmother, and for the dish she taught us — <strong>miang kham</strong>, where sweet, sour, salt, heat and bitter all meet in a single fold of betel leaf. Made by hand, in small batches, the way she did.</p>
+          <p class="bi-th">เราตั้งชื่อร้านตามคุณยาย และตามอาหารจานที่ท่านสอนเราไว้ — <strong>เมี่ยงคำ</strong> ที่รวมรสหวาน เปรี้ยว เค็ม เผ็ด และขม ไว้ในใบชะพลูเพียงคำเดียว ทำด้วยมือ ทีละน้อย อย่างที่ท่านเคยทำ</p>
+          <p class="bi-en">We are named for our grandmother, and for the dish she taught us — miang kham, where sweet, sour, salt, heat and bitter all meet in a single fold of betel leaf. Made by hand, in small batches, the way she did.</p>
           <div class="hero-cta">
-            <a class="btn btn-primary" href="shop.html">Shop the pantry <span class="arrow">→</span></a>
-            <a class="btn btn-gold" href="#anatomy">Taste the ritual</a>
+            <a class="btn btn-primary" href="shop.html">เลือกซื้อ / Shop the pantry <span class="arrow">→</span></a>
+            <a class="btn btn-gold" href="#anatomy">ลิ้มรสวิถีเมี่ยง / Taste the ritual</a>
           </div>
           <div class="hero-stats">
-            <div><div class="s-num">8</div><div class="s-label">condiments, one bite</div></div>
-            <div><div class="s-num">100%</div><div class="s-label">small-batch, hand-pounded</div></div>
-            <div><div class="s-num">0</div><div class="s-label">preservatives, ever</div></div>
+            <div><div class="s-num">8</div><div class="s-label"><span class="th">เครื่องเมี่ยง ในหนึ่งคำ</span>condiments, one bite</div></div>
+            <div><div class="s-num">100%</div><div class="s-label"><span class="th">ตำมือ ทีละน้อย</span>small-batch, hand-pounded</div></div>
+            <div><div class="s-num">0</div><div class="s-label"><span class="th">วัตถุกันเสีย ไม่เคยใส่</span>preservatives, ever</div></div>
           </div>
         </div>
         <div class="hero-art">
@@ -72,7 +79,8 @@
         <div class="center" style="margin-bottom:2.4rem">
           <span class="eyebrow">The signature</span>
           <h2 class="section-title"><span class="th">แปดเครื่องเมี่ยง</span>Anatomy of a perfect bite</h2>
-          <p class="lede">Miang kham isn't cooked — it's <em>assembled</em>, at the table, by you. Open the set and hover each ingredient to see what it gives you.</p>
+          <p class="lede bi-th">เมี่ยงคำไม่ได้ปรุงสุกอยู่ในครัว แต่<em>ประกอบขึ้นตรงหน้าโต๊ะ</em> ด้วยมือของคุณเอง ลองแตะดูแต่ละเครื่องเคียง แล้วจะรู้ว่าสิ่งเล็กๆ เหล่านี้ให้อะไรกับเราบ้าง</p>
+          <p class="lede bi-en">Miang kham isn't cooked — it's assembled, at the table, by you. Open the set and hover each ingredient to see what it gives you.</p>
         </div>
         <div class="mk-anatomy" id="mk-anatomy">
           <div class="mk-readout" id="mk-anatomy-readout" aria-live="polite">
@@ -85,7 +93,7 @@
           </div>
         </div>
         <div class="center" style="margin-top:2.2rem">
-          <a class="btn btn-ghost" href="product.html?id=miang-kham-set">Get the Miang Kham set <span class="arrow">→</span></a>
+          <a class="btn btn-ghost" href="product.html?id=miang-kham-set">สั่งชุดเมี่ยงคำ / Get the Miang Kham set <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -96,16 +104,20 @@
         <div data-reveal>
           <span class="eyebrow">Our story</span>
           <h2 class="section-title"><span class="th">จากครัวของยาย</span>From Grandma's kitchen, not a factory</h2>
-          <p class="lede" style="font-size:var(--t-base)">Yaiya began at a worn wooden table in the South, where our grandmother — <em>ยายย่า</em> — pounded chilli pastes by hand and folded miang kham for anyone who walked in. Nothing was measured; everything was tasted.</p>
-          <p style="color:var(--muted);margin-top:1rem">We still pound, never blend. We still roast over real heat. Every jar is filled in small batches so the flavour stays as loud and bright as it was at her table.</p>
+          <p class="lede bi-th" style="font-size:var(--t-base)">ยายย่าเริ่มต้นที่โต๊ะไม้เก่าตัวหนึ่งในภาคใต้ ที่ซึ่ง<em>ยายย่า</em>ของเราตำน้ำพริกด้วยมือ และห่อเมี่ยงคำให้ทุกคนที่แวะเวียนเข้ามา ไม่เคยมีการตวงวัด มีเพียงการชิมจนกว่าจะได้รสที่ใช่</p>
+          <p class="bi-en">Yaiya began at a worn wooden table in the South, where our grandmother pounded chilli pastes by hand and folded miang kham for anyone who walked in. Nothing was measured; everything was tasted.</p>
+          <p class="bi-th" style="margin-top:1.2rem">เรายังคงตำ ไม่เคยปั่น ยังคงคั่วบนไฟจริง ทุกกระปุกบรรจุทีละน้อย เพื่อให้รสชาติยังจัดจ้านและสดใส เหมือนวันวานบนโต๊ะของท่าน</p>
+          <p class="bi-en">We still pound, never blend. We still roast over real heat. Every jar is filled in small batches so the flavour stays as loud and bright as it was at her table.</p>
           <div style="display:flex;gap:0.8rem;margin-top:1.6rem;flex-wrap:wrap">
-            <a class="btn btn-primary" href="#process">How we make it</a>
-            <a class="btn btn-ghost" href="shop.html">Browse the pantry</a>
+            <a class="btn btn-primary" href="#process">ขั้นตอนการทำ / How we make it</a>
+            <a class="btn btn-ghost" href="shop.html">เลือกซื้อสินค้า / Browse the pantry</a>
           </div>
         </div>
         <div class="story-card" data-reveal data-reveal-delay="120">
-          <p class="story-quote">"Sweet, sour, salt and fire — if a bite has all of them, it has everything."</p>
-          <p style="margin-top:1.2rem">It is the rule she cooked by, and the rule every Yaiya jar is held to before it leaves us.</p>
+          <p class="story-quote">"หวาน เปรี้ยว เค็ม และเผ็ดร้อน — หากคำใดมีครบทุกรส คำนั้นก็มีครบทุกสิ่ง"</p>
+          <p class="bi-en" style="margin-top:0.5rem">"Sweet, sour, salt and fire — if a bite has all of them, it has everything."</p>
+          <p class="bi-th" style="margin-top:1.2rem">นี่คือกฎที่ท่านยึดถือในการปรุง และเป็นกฎที่ทุกกระปุกของยายย่าต้องผ่าน ก่อนออกจากมือเรา</p>
+          <p class="bi-en">It is the rule she cooked by, and the rule every Yaiya jar is held to before it leaves us.</p>
           <p class="story-sign">— ยายย่า, our grandmother</p>
         </div>
       </div>
@@ -117,11 +129,14 @@
         <div class="center" style="margin-bottom:2.4rem">
           <span class="eyebrow">From the pantry</span>
           <h2 class="section-title"><span class="th">ของขายดี</span>Loved at the table</h2>
+          <p class="lede bi-th">จานโปรดที่ทุกโต๊ะเรียกหา คัดมาให้แล้วจากครัวของเรา</p>
+          <p class="lede bi-en">The dishes every table asks for — picked from our kitchen.</p>
           <img class="divider-art" src="assets/img/divider.svg" alt="" />
         </div>
-        <div class="product-grid" id="featured-grid"></div>
-        <div class="center" style="margin-top:2.4rem">
-          <a class="btn btn-ghost" href="shop.html">See everything <span class="arrow">→</span></a>
+        <div class="product-grid rail" id="featured-grid"></div>
+        <div class="rail-dots" id="featured-dots" aria-hidden="true"></div>
+        <div class="center" style="margin-top:2rem">
+          <a class="btn btn-ghost" href="shop.html">ดูสินค้าทั้งหมด / See everything <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -131,7 +146,9 @@
       <div class="wrap">
         <div class="center" style="margin-bottom:2.2rem">
           <span class="eyebrow">Three shelves</span>
-          <h2 class="section-title">What we make</h2>
+          <h2 class="section-title"><span class="th">สามชั้นวางของเรา</span>What we make</h2>
+          <p class="lede bi-th">จากใบชะพลูสดในตะกร้า ถึงไหหมักที่รอเวลาของมัน ทุกอย่างมีที่ทางของตัวเอง</p>
+          <p class="lede bi-en">From fresh betel leaves to jars that wait their turn — everything has its place.</p>
         </div>
         <div class="cat-grid">
           <a class="cat-card" href="shop.html#signature" data-reveal>
@@ -156,27 +173,37 @@
         <div class="center" style="margin-bottom:2.4rem">
           <span class="eyebrow">How we make it</span>
           <h2 class="section-title"><span class="th">ทำมือทุกขั้นตอน</span>Slow, by hand, in small batches</h2>
+          <p class="lede bi-th">ในครัวของยายไม่มีทางลัด มีเพียงเวลาและความตั้งใจ</p>
+          <p class="lede bi-en">No shortcuts in Grandma's kitchen — only time and care.</p>
         </div>
         <div class="process-grid">
           <div class="process-step" data-reveal>
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10Z"/><path d="M9 14c.5 1.5 1.5 2.3 3 2.5"/></svg></div>
-            <h4>1 · Source</h4>
-            <p>Betel leaves, palm sugar and chillies from Thai growers we know by name.</p>
+            <!-- betel leaf: heart-shaped blade with stem and midrib -->
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5c-5.2-3.2-8-7.2-8-11.1C4 6.9 6.1 4.6 8.9 4.6c1.3 0 2.4.6 3.1 1.6.7-1 1.8-1.6 3.1-1.6 2.8 0 4.9 2.3 4.9 5.8 0 3.9-2.8 7.9-8 11.1Z"/><path d="M12 21.5V2.8"/><path d="m12 14.6-3.5-2.7M12 14.6l3.5-2.7"/></svg></div>
+            <h4>๑ · คัดสรร <span class="step-en">Source</span></h4>
+            <p class="bi-th">ใบชะพลู น้ำตาลปี๊บ และพริก จากเกษตรกรไทยที่เรารู้จักชื่อทุกคน</p>
+            <p class="bi-en">Betel leaves, palm sugar and chillies from Thai growers we know by name.</p>
           </div>
           <div class="process-step" data-reveal data-reveal-delay="100">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21h14"/><path d="M7 21V9l5-5 5 5v12"/><path d="M10 13h4"/></svg></div>
-            <h4>2 · Pound</h4>
-            <p>Stone mortar, never a blender — so the oils release slow and the paste keeps its grain.</p>
+            <!-- stone mortar with pestle resting inside -->
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11h13c0 4.1-2.9 7-6.5 7s-6.5-2.9-6.5-7Z"/><path d="M2.6 11h14.8"/><path d="M10 18v2.6"/><path d="M7 20.6h6"/><path d="m14.6 12.4 4.7-7.2"/><circle cx="20.3" cy="3.6" r="1.5"/></svg></div>
+            <h4>๒ · ตำ <span class="step-en">Pound</span></h4>
+            <p class="bi-th">ครกหิน ไม่ใช่เครื่องปั่น น้ำมันหอมจึงค่อยๆ คลายตัว และเนื้อน้ำพริกยังคงความหยาบที่พอดี</p>
+            <p class="bi-en">Stone mortar, never a blender — so the oils release slow and the paste keeps its grain.</p>
           </div>
           <div class="process-step" data-reveal data-reveal-delay="200">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1.5 3 4 4.5 4 7.5A4 4 0 0 1 8 9.5C8 6.5 10.5 5 12 2Z"/><path d="M5 14c0 4 3 7 7 7s7-3 7-7"/></svg></div>
-            <h4>3 · Roast</h4>
-            <p>Real heat coaxes the smoke and caramel out of every chilli and shallot.</p>
+            <!-- open flame, outer and inner tongue -->
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5c3.6 0 6.5-2.7 6.5-6.1 0-4-2.9-5.9-4.3-9.9-1.1 1.9-2 2.7-3.1 3.4.1-1.9-.2-3.7-1.7-5.4-.9 3-2.9 4.7-4 7a7.7 7.7 0 0 0-.4 4.9c.6 3.4 3.3 6.1 7 6.1Z"/><path d="M12 21.5c1.9 0 3.4-1.4 3.4-3.2 0-1.9-1.4-2.9-2.1-4.6-.9 1.2-1.7 1.7-2.4 2.5-.6.8-.9 1.6-.9 2.4 0 1.6 1.2 2.9 2 2.9Z"/></svg></div>
+            <h4>๓ · คั่ว <span class="step-en">Roast</span></h4>
+            <p class="bi-th">มีเพียงไฟจริงเท่านั้นที่ดึงกลิ่นควันและความหวานไหม้ออกมาจากพริกและหอมแดง</p>
+            <p class="bi-en">Real heat coaxes the smoke and caramel out of every chilli and shallot.</p>
           </div>
           <div class="process-step" data-reveal data-reveal-delay="300">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="9" width="12" height="11" rx="2"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/><path d="M12 13v3"/></svg></div>
-            <h4>4 · Jar</h4>
-            <p>Filled the same day, sealed by hand. No preservatives, nothing to hide.</p>
+            <!-- lidded glass jar with label band -->
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7.6" y="2.6" width="8.8" height="3.2" rx="1.1"/><path d="M9.2 5.8v1.3c0 .8-.4 1.5-1.1 2A4.7 4.7 0 0 0 6 13v6a2.2 2.2 0 0 0 2.2 2.2h7.6A2.2 2.2 0 0 0 18 19v-6c0-1.6-.8-3.1-2.1-3.9-.7-.5-1.1-1.2-1.1-2V5.8"/><path d="M6 12.8h12"/><path d="M6 17.4h12"/></svg></div>
+            <h4>๔ · บรรจุ <span class="step-en">Jar</span></h4>
+            <p class="bi-th">บรรจุในวันเดียวกัน ปิดผนึกด้วยมือ ไม่มีวัตถุกันเสีย ไม่มีอะไรต้องปิดบัง</p>
+            <p class="bi-en">Filled the same day, sealed by hand. No preservatives, nothing to hide.</p>
           </div>
         </div>
       </div>
@@ -186,8 +213,9 @@
     <section class="section feature-band">
       <div class="wrap center">
         <span class="eyebrow" style="color:var(--gold-soft)">From our table to yours</span>
-        <p class="quote-big" style="margin-top:1rem">"I folded my first miang kham and was eight years old again, in my grandmother's kitchen in Hat Yai."</p>
-        <p class="quote-author">— Ploy S., Bangkok</p>
+        <p class="quote-big" style="margin-top:1rem">"พอได้ห่อเมี่ยงคำคำแรก ฉันก็กลับไปเป็นเด็กแปดขวบอีกครั้ง ในครัวของยายที่หาดใหญ่"</p>
+        <p class="bi-en" style="max-width:44ch;margin-inline:auto">"I folded my first miang kham and was eight years old again, in my grandmother's kitchen in Hat Yai."</p>
+        <p class="quote-author">— คุณพลอย ส., กรุงเทพฯ / Ploy S., Bangkok</p>
       </div>
     </section>
 
@@ -195,11 +223,12 @@
     <section class="section center">
       <div class="wrap">
         <span class="eyebrow">Stay in touch</span>
-        <h2 class="section-title">Recipes, restocks & a little nostalgia</h2>
-        <p class="lede" style="margin-inline:auto">A gentle note now and then — never more than once a month.</p>
+        <h2 class="section-title"><span class="th">สูตรอาหาร ของเข้าใหม่ และความคิดถึง</span>Recipes, restocks &amp; a little nostalgia</h2>
+        <p class="lede bi-th" style="margin-inline:auto">จดหมายสั้นๆ ส่งถึงกันเป็นครั้งคราว ไม่เกินเดือนละครั้ง</p>
+        <p class="lede bi-en" style="margin-inline:auto">A gentle note now and then — never more than once a month.</p>
         <form class="newsletter" id="news-form" novalidate>
           <input type="email" name="email" placeholder="your@email.com" aria-label="Email address" required />
-          <button class="btn btn-primary" type="submit">Subscribe</button>
+          <button class="btn btn-primary" type="submit">สมัคร / Subscribe</button>
         </form>
         <p id="news-msg" style="font-size:var(--t-sm);color:var(--betel-700);margin-top:0.8rem;min-height:1.2em" role="status"></p>
       </div>
@@ -272,6 +301,21 @@
           </div>
         </article>`;
       }).join("");
+
+      // Featured rail: on mobile the grid becomes a horizontal snap carousel — keep the dot
+      // indicators in step with however far it's been scrolled. (Dots are CSS-hidden on desktop.)
+      (function () {
+        const dots = document.getElementById("featured-dots");
+        const cards = [...grid.children];
+        if (!dots || cards.length < 2) return;
+        dots.innerHTML = cards.map((_, i) => `<span class="rail-dot${i ? "" : " active"}"></span>`).join("");
+        const dotEls = [...dots.children];
+        grid.addEventListener("scroll", () => {
+          const i = Math.round(grid.scrollLeft / (grid.scrollWidth / cards.length));
+          const cur = Math.max(0, Math.min(i, cards.length - 1));
+          dotEls.forEach((d, n) => d.classList.toggle("active", n === cur));
+        }, { passive: true });
+      })();
 
       // Anatomy of a bite: hover an ingredient to see its Thai health benefit with English subtitle
       (function () {

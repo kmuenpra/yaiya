@@ -104,6 +104,17 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .lede { color: var(--muted); max-width: 56ch; font-size: var(--t-lg); }
 .center .lede { margin-inline: auto; }
 
+/* Bilingual body copy: Thai leads, English follows beneath as a smaller subtitle.
+   Pair them as sibling <p class="bi-th"> + <p class="bi-en">. */
+.bi-th { font-family: "Noto Sans Thai", var(--f-body); color: var(--ink); line-height: 1.75; }
+.bi-en { font-size: 0.84em; color: var(--muted); line-height: 1.6; margin-top: 0.3rem; max-width: 60ch; }
+.center .bi-en { margin-inline: auto; }
+.lede.bi-en { font-size: var(--t-sm); }
+/* On the dark hero / story card / testimonial band the muted grey would disappear */
+.hero .bi-th { color: color-mix(in srgb, var(--rice) 92%, transparent); }
+.hero .bi-en, .story-card .bi-en, .feature-band .bi-en { color: color-mix(in srgb, var(--rice) 62%, transparent); }
+.story-card .bi-th { color: color-mix(in srgb, var(--rice) 88%, transparent); }
+
 .divider-art { width: 220px; height: 26px; margin: 1.4rem auto 0; opacity: 0.9; }
 
 /* ===================== buttons ===================== */
@@ -136,6 +147,14 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 }
 .site-header.scrolled { border-color: var(--line); box-shadow: var(--shadow-sm); background: color-mix(in srgb, var(--rice) 96%, transparent); }
 .nav-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.7rem 0; min-height: 64px; }
+.brand-cluster { display: inline-flex; align-items: center; gap: 0.9rem; min-width: 0; }
+.nav-phone { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; border-radius: var(--r-pill);
+  border: 1px solid var(--line); background: var(--rice-card); color: var(--betel);
+  font-size: var(--t-sm); font-weight: 600; font-feature-settings: "lnum" 1, "tnum" 1; white-space: nowrap;
+  transition: border-color 0.2s, background 0.2s, transform 0.18s; }
+.nav-phone svg { width: 16px; height: 16px; color: var(--palm-deep); flex: none; }
+.nav-phone:hover { border-color: var(--gold); background: var(--rice-deep); }
+.nav-phone:active { transform: scale(0.97); }
 .brand { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--betel); }
 .brand .mark { width: 40px; height: 40px; color: var(--betel); }
 .brand .mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
@@ -182,6 +201,8 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .hero-stats { display: flex; gap: 2rem; margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid rgba(228, 199, 120, 0.25); }
 .hero-stats .s-num { font-family: var(--f-display); font-size: 1.7rem; color: var(--gold-soft); line-height: 1; }
 .hero-stats .s-label { font-size: var(--t-xs); letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--rice) 70%, transparent); margin-top: 4px; }
+.hero-stats .s-label .th { display: block; font-family: "Noto Sans Thai", var(--f-body); font-size: 0.82rem;
+  letter-spacing: 0; text-transform: none; color: var(--gold-soft); margin-bottom: 2px; }
 
 .hero-art { position: relative; display: grid; place-items: center; }
 .hero-art .leaf { width: min(92%, 420px); filter: drop-shadow(0 30px 50px rgba(0,0,0,0.35)); animation: sway 7s ease-in-out infinite; }
@@ -256,6 +277,12 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .add-btn:active { transform: scale(0.9); }
 .add-btn svg { width: 20px; height: 20px; }
 
+/* Featured rail: a plain grid on desktop, a horizontal snap carousel on small screens
+   (see the max-width: 720px block for the carousel itself). Dots follow it there too. */
+.rail-dots { display: none; justify-content: center; gap: 0.45rem; margin-top: 1.1rem; }
+.rail-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line); transition: background 0.25s, transform 0.25s; }
+.rail-dot.active { background: var(--palm); transform: scale(1.35); }
+
 .heat { display: inline-flex; gap: 2px; align-items: center; }
 .heat .pip { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
 .heat .pip.on { background: var(--chili); }
@@ -277,8 +304,11 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .process-step { text-align: center; padding: 1.4rem 1rem; }
 .process-step .ico { width: 64px; height: 64px; margin: 0 auto 1rem; border-radius: 50%; background: var(--rice-deep); display: grid; place-items: center; color: var(--betel); border: 1px solid var(--line); }
 .process-step .ico svg { width: 30px; height: 30px; }
-.process-step h4 { color: var(--betel); margin-bottom: 0.3rem; font-size: var(--t-lg); }
+.process-step h4 { color: var(--betel); margin-bottom: 0.4rem; font-size: var(--t-lg); font-family: "Noto Sans Thai", var(--f-body); font-weight: 600; }
+.process-step h4 .step-en { display: block; font-family: var(--f-display); font-size: 0.86em; font-weight: 600; color: var(--palm-deep); letter-spacing: 0.04em; margin-top: 2px; }
 .process-step p { font-size: var(--t-sm); color: var(--muted); }
+.process-step .bi-th { font-size: var(--t-sm); color: var(--betel); }
+.process-step .bi-en { font-size: var(--t-xs); }
 
 /* ===================== testimonial / newsletter ===================== */
 .feature-band { background: var(--betel); color: var(--rice); position: relative; overflow: hidden; }
@@ -434,8 +464,30 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
   .cat-grid { grid-template-columns: 1fr; }
   .newsletter { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
+
+  /* Featured products become a swipeable, edge-to-edge carousel instead of a tall stack.
+     Negative margins cancel .wrap's 1.2rem gutter so cards can peek in from both sides. */
+  .product-grid.rail {
+    display: flex; gap: 1rem;
+    overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-inline: -1.2rem; padding: 0.3rem 1.2rem 0.6rem;
+  }
+  .product-grid.rail::-webkit-scrollbar { display: none; }
+  .product-grid.rail > .product-card { flex: 0 0 78%; max-width: 320px; scroll-snap-align: center; }
+  /* cards parked off to the right would otherwise sit at opacity:0 until swiped into view */
+  .product-grid.rail [data-reveal] { opacity: 1; transform: none; }
+  .rail-dots { display: flex; }
   .cart-row { grid-template-columns: 72px 1fr; }
   .cart-row .row-end { grid-column: 1 / -1; flex-direction: row; justify-items: stretch; }
+}
+
+/* Narrow phones: drop the wordmark text so the phone number itself still fits beside the logo */
+@media (max-width: 560px) {
+  .brand-cluster { gap: 0.5rem; }
+  .site-header .brand-name { display: none; }
+  .nav-phone { padding: 0.35rem 0.65rem; font-size: var(--t-xs); gap: 0.3rem; }
+  .nav-phone svg { width: 14px; height: 14px; }
 }
 
 @media (max-width: 460px) {
