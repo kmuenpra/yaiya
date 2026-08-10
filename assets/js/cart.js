@@ -72,7 +72,7 @@ function flashCart() {
 
   const t = document.getElementById("toast");
   if (t) {
-    t.textContent = "Added to your basket";
+    t.textContent = "เพิ่มลงตะกร้าแล้ว / Added to your basket";
     t.classList.add("show");
     clearTimeout(t._timer);
     t._timer = setTimeout(() => t.classList.remove("show"), 2600);

@@ -51,8 +51,8 @@
       <div class="wrap">
         <div class="crumbs"><a href="index.html">Home</a><span>/</span><span>Gallery</span></div>
         <h1><span class="th">ภาพจากครัวของเรา</span>Gallery</h1>
-        <p>แวะดูบรรยากาศร้าน วัตถุดิบ และของอร่อยที่เราทำด้วยมือทุกขั้นตอน แตะที่ภาพเพื่อดูขนาดเต็ม</p>
-        <p class="page-head-en">A look inside our shop, our ingredients and everything we make by hand. Tap any photo to view it full size.</p>
+        <p>แวะดูบรรยากาศร้าน วัตถุดิบ และของอร่อยที่เราทำด้วยมือทุกขั้นตอน แตะที่ภาพเพื่อดูขนาดเต็ม และลองแตะการ์ดเรืองแสงสีทอง เพื่อเปิดอ่านสำนวนสนุกๆ ที่ยายย่าอยากบอก</p>
+        <p class="page-head-en">A look inside our shop, our ingredients and everything we make by hand. Tap any photo to view it full size — and tap a glowing gold card to flip it open for one of Grandma's playful sayings.</p>
       </div>
     </section>
 
@@ -106,18 +106,109 @@
     (function () {
       const collage = document.getElementById("collage");
       const empty = document.getElementById("collage-empty");
-      const images = typeof GALLERY_IMAGES !== "undefined" ? GALLERY_IMAGES : [];
+      const source = typeof GALLERY_IMAGES !== "undefined" ? GALLERY_IMAGES : [];
 
-      if (!images.length) { empty.hidden = false; return; }
+      if (!source.length) { empty.hidden = false; return; }
+
+      // GALLERY_PINNED always leads, in the order it's listed; everything else is shuffled
+      // (Fisher-Yates) behind it, so visitors get a fresh arrangement on every page load.
+      // `images` is what both the collage and the lightbox index into.
+      const pinList = typeof GALLERY_PINNED !== "undefined" ? GALLERY_PINNED : [];
+      const bySrc = new Map(source.map((img) => [img.src, img]));
+      // A pin only reorders an existing entry — it can't add one. Say so loudly in the console
+      // rather than silently dropping it, since a stray pin otherwise looks like "nothing happened".
+      pinList.filter((s) => !bySrc.has(s)).forEach((s) =>
+        console.warn(`GALLERY_PINNED: "${s}" has no matching entry in GALLERY_IMAGES, so it was ignored. Add it to GALLERY_IMAGES to pin it.`));
+      const pinned = pinList.map((s) => bySrc.get(s)).filter(Boolean);
+      const pinnedSrc = new Set(pinned.map((img) => img.src));
+
+      const rest = source.filter((img) => !pinnedSrc.has(img.src));
+      for (let i = rest.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rest[i], rest[j]] = [rest[j], rest[i]];
+      }
+      const images = pinned.concat(rest);
 
       const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-      collage.innerHTML = images.map((img, i) =>
-        `<button class="collage-item" type="button" data-i="${i}" aria-label="ดูภาพขนาดเต็ม / Enlarge: ${esc(img.alt)}">
-          <img src="${esc(img.src)}" alt="${esc(img.alt)}" loading="lazy" />
-          <span class="collage-zoom" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>
-          </span>
-        </button>`).join("");
+      // Files named *yaiya-comic* are the "ยายย่า บอกว่า" cards: shown face-down behind the
+      // Yaiya silhouette, flipped open on click. Detected by filename so no extra data is needed.
+      const isComic = (src) => /yaiya-comic/i.test(src);
+
+      // Build each tile once, then hand them to the column layout below.
+      const tiles = images.map((img, i) => {
+        const label = esc(img.alt);
+        const el = document.createElement("button");
+        el.type = "button";
+        el.dataset.i = i;
+        if (isComic(img.src)) {
+          el.className = "collage-item is-comic";
+          el.setAttribute("aria-label", "เปิดการ์ด ยายย่า บอกว่า / Flip open: " + img.alt);
+          el.innerHTML =
+            `<span class="flip">
+              <span class="flip-face flip-front">
+                <img src="assets/img/Yaiya_mark_v2.jpg" alt="" />
+                <span class="comic-badge"><span class="cb-th">ยายย่า บอกว่า</span><span class="cb-hint">แตะเพื่อเปิด / tap to open</span></span>
+              </span>
+              <span class="flip-face flip-back">
+                <img src="${esc(img.src)}" alt="${label}" loading="lazy" />
+              </span>
+            </span>`;
+        } else {
+          el.className = "collage-item";
+          el.setAttribute("aria-label", "ดูภาพขนาดเต็ม / Enlarge: " + img.alt);
+          el.innerHTML =
+            `<img src="${esc(img.src)}" alt="${label}" loading="lazy" />
+            <span class="collage-zoom" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>
+            </span>`;
+        }
+        return el;
+      });
+
+      /* If a listed file has been deleted from assets/img/gallery/, drop its tile instead of
+         leaving a blank gap — and mark it so the lightbox skips over it too. Only the photo
+         itself is watched (not the shared comic cover), so one card can't take out the rest. */
+      tiles.forEach((tile) => {
+        const photo = tile.querySelector(".flip-back img") || tile.querySelector("img");
+        photo.addEventListener("error", () => {
+          images[+tile.dataset.i].missing = true;
+          const at = tiles.indexOf(tile);
+          if (at >= 0) tiles.splice(at, 1);
+          tile.remove();
+        });
+      });
+
+      /* Row-major masonry. CSS multi-column flows top-to-bottom down column 1 first, which
+         buried the pinned photos in the far-left column — so we deal the tiles across real
+         columns instead (1st → col 1, 2nd → col 2, …), putting the leading images across the
+         top of the page while keeping the loose, uncropped collage look. */
+      // matchMedia (not window.innerWidth) so the column count always agrees with the CSS
+      // breakpoints — innerWidth includes the scrollbar and can straddle a boundary.
+      const colCount = () =>
+        matchMedia("(max-width: 420px)").matches ? 1 :
+        matchMedia("(max-width: 760px)").matches ? 2 :
+        matchMedia("(max-width: 1080px)").matches ? 3 : 4;
+      let currentCols = 0;
+      function layoutCollage() {
+        const n = colCount();
+        if (n === currentCols) return;          // only rebuild when the count actually changes
+        currentCols = n;
+        collage.textContent = "";
+        const cols = [];
+        for (let c = 0; c < n; c++) {
+          const col = document.createElement("div");
+          col.className = "collage-col";
+          collage.appendChild(col);
+          cols.push(col);
+        }
+        tiles.forEach((tile, i) => cols[i % n].appendChild(tile));
+      }
+      layoutCollage();
+      let resizeTimer;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(layoutCollage, 150);
+      });
 
       /* ---- lightbox ---- */
       const lb = document.getElementById("lightbox");
@@ -126,8 +217,14 @@
       let cur = 0;
       let lastFocused = null;
 
-      const show = (i) => {
-        cur = (i + images.length) % images.length;
+      const wrap = (n) => ((n % images.length) + images.length) % images.length;
+      // `dir` keeps prev/next moving the same way when they step over a missing image
+      const show = (i, dir) => {
+        let n = wrap(i);
+        for (let guard = 0; images[n].missing && guard < images.length; guard++) {
+          n = wrap(n + (dir || 1));
+        }
+        cur = n;
         lbImg.src = images[cur].src;
         lbImg.alt = images[cur].alt || "";
         lbCap.textContent = images[cur].alt || "";
@@ -142,23 +239,34 @@
       const close = () => {
         lb.hidden = true;
         document.body.style.overflow = "";
+        // turn any opened comic card back face-down, so it keeps its glow and its mystery
+        collage.querySelectorAll(".collage-item.flipped").forEach((el) => el.classList.remove("flipped"));
         if (lastFocused) lastFocused.focus();
       };
 
+      const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
       collage.addEventListener("click", (e) => {
         const btn = e.target.closest(".collage-item");
-        if (btn) open(+btn.dataset.i);
+        if (!btn) return;
+        const i = +btn.dataset.i;
+        if (btn.classList.contains("is-comic")) {
+          // let the card flip over first, then enlarge — unless the visitor prefers less motion
+          btn.classList.add("flipped");
+          setTimeout(() => open(i), reduceMotion ? 0 : 620);
+        } else {
+          open(i);
+        }
       });
       document.getElementById("lb-close").addEventListener("click", close);
-      document.getElementById("lb-prev").addEventListener("click", () => show(cur - 1));
-      document.getElementById("lb-next").addEventListener("click", () => show(cur + 1));
+      document.getElementById("lb-prev").addEventListener("click", () => show(cur - 1, -1));
+      document.getElementById("lb-next").addEventListener("click", () => show(cur + 1, 1));
       // clicking the backdrop (but not the photo or a control) closes the viewer
       lb.addEventListener("click", (e) => { if (e.target === lb || e.target.classList.contains("lb-figure")) close(); });
       document.addEventListener("keydown", (e) => {
         if (lb.hidden) return;
         if (e.key === "Escape") close();
-        else if (e.key === "ArrowLeft") show(cur - 1);
-        else if (e.key === "ArrowRight") show(cur + 1);
+        else if (e.key === "ArrowLeft") show(cur - 1, -1);
+        else if (e.key === "ArrowRight") show(cur + 1, 1);
       });
     })();
   </script>

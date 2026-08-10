@@ -705,8 +705,12 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
    ===================================================================== */
 .page-head .page-head-en { font-size: var(--t-sm); color: color-mix(in srgb, var(--rice) 62%, transparent); margin-top: 0.35rem; }
 
-.collage { columns: 4; column-gap: 1rem; }
-.collage-item { display: block; width: 100%; padding: 0; margin: 0 0 1rem; break-inside: avoid;
+/* Real flex columns rather than CSS multi-column: the script deals tiles across them in
+   row-major order (1st → col 1, 2nd → col 2, …), so the pinned photos land along the top of
+   the page instead of stacking down the left-hand column. */
+.collage { display: flex; align-items: flex-start; gap: 1rem; }
+.collage-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
+.collage-item { display: block; width: 100%; padding: 0; margin: 0;
   position: relative; border-radius: var(--r-md); overflow: hidden; background: var(--rice-deep);
   box-shadow: var(--shadow-sm); cursor: zoom-in; line-height: 0;
   transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease); }
@@ -721,13 +725,50 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
   opacity: 0; transform: translateY(6px); transition: opacity 0.28s ease, transform 0.28s var(--ease); }
 .collage-zoom svg { width: 18px; height: 18px; }
 .collage-item:hover .collage-zoom, .collage-item:focus-visible .collage-zoom { opacity: 1; transform: none; }
+/* ---- "ยายย่า บอกว่า" comic cards ----
+   Files named *yaiya-comic* render face-down behind the Yaiya silhouette, ringed by a slow
+   golden glow, and flip over on click before the lightbox enlarges them. */
+.collage-item.is-comic { perspective: 1200px; background: var(--rice); border: 2px solid var(--gold);
+  cursor: pointer; animation: comic-glow 3.2s ease-in-out infinite; }
+@keyframes comic-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(200,162,75,0.35), 0 0 0 1px rgba(200,162,75,0.22); }
+  50%      { box-shadow: 0 0 26px rgba(200,162,75,0.78), 0 0 0 1px rgba(200,162,75,0.5); }
+}
+/* once opened it stops competing for attention */
+.collage-item.is-comic.flipped { animation: none; box-shadow: var(--shadow-md); }
+/* the base hover scrim/zoom badge don't apply to these */
+.collage-item.is-comic::after { display: none; }
+
+.collage-item.is-comic .flip { position: relative; display: block; width: 100%; aspect-ratio: 1 / 1;
+  transform-style: preserve-3d; transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.collage-item.is-comic.flipped .flip { transform: rotateY(180deg); }
+.collage-item.is-comic:hover .flip { transform: rotateY(8deg); }
+.collage-item.is-comic.flipped:hover .flip { transform: rotateY(180deg); }
+.flip-face { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+/* padding-bottom reserves the badge's space so the silhouette centres in the area *above*
+   the caption instead of being crowded against it */
+.flip-front { background: var(--rice); padding-bottom: 3rem; }
+/* the silhouette ships on a white background — multiply drops that white so it sits on the
+   cream tile seamlessly instead of showing as a white square */
+.collage-item.is-comic .flip-front img { width: 78%; height: auto; transform: none; mix-blend-mode: multiply; }
+.flip-back { transform: rotateY(180deg); background: var(--betel); }
+.collage-item.is-comic .flip-back img { width: 100%; height: 100%; object-fit: cover; transform: none; }
+
+.comic-badge { position: absolute; left: 0; right: 0; bottom: 0; display: grid; gap: 2px;
+  padding: 1.4rem 0.6rem 0.75rem; text-align: center;
+  background: linear-gradient(to top, rgba(30,61,44,0.94), rgba(30,61,44,0.72) 55%, transparent); }
+.comic-badge .cb-th { font-family: var(--f-thai); font-size: 1.12rem; color: var(--gold-soft);
+  line-height: 1.2; text-shadow: 0 1px 6px rgba(0,0,0,0.45); }
+.comic-badge .cb-hint { font-family: "Noto Sans Thai", var(--f-body); font-size: 0.68rem;
+  color: color-mix(in srgb, var(--rice) 72%, transparent); }
+
 .collage-empty { text-align: center; color: var(--muted); font-size: var(--t-sm); padding: 3rem 1rem; }
 .collage-empty code { background: var(--rice-deep); border-radius: 4px; padding: 0.15em 0.4em; font-size: 0.92em; }
 
-/* staggered column counts keep the collage feeling hand-placed rather than gridded */
-@media (max-width: 1080px) { .collage { columns: 3; } }
-@media (max-width: 760px)  { .collage { columns: 2; column-gap: 0.7rem; } .collage-item { margin-bottom: 0.7rem; } }
-@media (max-width: 420px)  { .collage { columns: 1; } }
+/* Column count is set by the script (colCountFor) to match these breakpoints — 4 / 3 / 2 / 1.
+   Only the gutters need adjusting here. */
+@media (max-width: 760px) { .collage, .collage-col { gap: 0.7rem; } }
 
 /* ---- lightbox ---- */
 .lightbox { position: fixed; inset: 0; z-index: 200; display: grid; grid-template-columns: auto 1fr auto;
