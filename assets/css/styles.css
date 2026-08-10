@@ -155,6 +155,12 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .nav-phone svg { width: 16px; height: 16px; color: var(--palm-deep); flex: none; }
 .nav-phone:hover { border-color: var(--gold); background: var(--rice-deep); }
 .nav-phone:active { transform: scale(0.97); }
+.nav-social { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; flex: none;
+  border: 1px solid var(--line); background: var(--rice-card); color: #1877F2;
+  transition: border-color 0.2s, background 0.2s, transform 0.18s; }
+.nav-social svg { width: 19px; height: 19px; }
+.nav-social:hover { border-color: #1877F2; background: color-mix(in srgb, #1877F2 8%, var(--rice-card)); }
+.nav-social:active { transform: scale(0.94); }
 .brand { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--betel); }
 .brand .mark { width: 40px; height: 40px; color: var(--betel); }
 .brand .mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
@@ -282,6 +288,10 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .rail-dots { display: none; justify-content: center; gap: 0.45rem; margin-top: 1.1rem; }
 .rail-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line); transition: background 0.25s, transform 0.25s; }
 .rail-dot.active { background: var(--palm); transform: scale(1.35); }
+/* the reviews rail scrolls at every width, so its dots are always shown (on a dark band) */
+#review-dots { display: flex; }
+#review-dots .rail-dot { background: color-mix(in srgb, var(--rice) 28%, transparent); }
+#review-dots .rail-dot.active { background: var(--gold-soft); }
 
 .heat { display: inline-flex; gap: 2px; align-items: center; }
 .heat .pip { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
@@ -316,6 +326,33 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .feature-band .wrap { position: relative; }
 .quote-big { font-family: var(--f-display); font-style: italic; font-size: var(--t-2xl); color: var(--rice); max-width: 24ch; margin-inline: auto; line-height: 1.3; }
 .quote-author { margin-top: 1.2rem; color: var(--gold-soft); font-family: var(--f-thai); }
+
+/* ---- customer reviews (all sourced from Facebook) ---- */
+.reviews-source { display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 0.9rem;
+  font-size: var(--t-sm); color: color-mix(in srgb, var(--rice) 72%, transparent); }
+.reviews-source svg { width: 18px; height: 18px; color: var(--gold-soft); flex: none; }
+
+/* Horizontal snap rail of review cards — scrollable at every width, since there are many */
+.review-rail { display: flex; gap: 1.1rem; align-items: stretch;
+  overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; padding: 0.3rem 0 0.6rem; }
+.review-rail::-webkit-scrollbar { display: none; }
+.review-card { flex: 0 0 min(88%, 360px); scroll-snap-align: center; display: flex; flex-direction: column;
+  background: var(--rice-card); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+  border-radius: var(--r-lg); padding: 1.3rem 1.4rem; box-shadow: var(--shadow-md); }
+.review-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.9rem;
+  padding-bottom: 0.9rem; border-bottom: 1px solid var(--line); }
+.review-avatar { width: 42px; height: 42px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  background: var(--betel); color: var(--gold-soft); font-family: var(--f-display); font-size: 1.25rem; line-height: 1; }
+.review-avatar.anon { background: var(--rice-deep); color: var(--palm-deep); }
+.review-who { display: grid; gap: 2px; min-width: 0; }
+.review-name { font-family: "Noto Sans Thai", var(--f-body); font-weight: 600; color: var(--betel);
+  font-size: var(--t-sm); line-height: 1.3; overflow-wrap: anywhere; }
+.review-name.anon { font-style: italic; font-weight: 500; color: var(--muted); }
+.review-src { display: inline-flex; align-items: center; gap: 0.3rem; font-size: var(--t-xs); color: var(--muted); }
+.review-src svg { width: 13px; height: 13px; color: #1877F2; flex: none; }
+.review-text { font-family: "Noto Sans Thai", var(--f-body); font-size: var(--t-sm); color: var(--ink);
+  line-height: 1.75; overflow-wrap: anywhere; }
 
 .newsletter { display: grid; grid-template-columns: 1fr auto; gap: 0.8rem; max-width: 520px; margin: 1.6rem auto 0; }
 .newsletter input { padding: 0.9rem 1.2rem; min-height: 50px; border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--rice-card); font: inherit; color: var(--ink); }
@@ -478,6 +515,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
   /* cards parked off to the right would otherwise sit at opacity:0 until swiped into view */
   .product-grid.rail [data-reveal] { opacity: 1; transform: none; }
   .rail-dots { display: flex; }
+  .review-rail { margin-inline: -1.2rem; padding-inline: 1.2rem; }
   .cart-row { grid-template-columns: 72px 1fr; }
   .cart-row .row-end { grid-column: 1 / -1; flex-direction: row; justify-items: stretch; }
 }
@@ -640,3 +678,64 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 @keyframes mk-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) { .mk-disc, .mk-box-lid, .mk-dot { animation: none; } }
+
+/* =====================================================================
+   Gallery — a deliberately loose photo collage (masonry columns, so photos
+   keep their own proportions instead of being cropped to a grid) plus a
+   click-to-enlarge lightbox.
+   ===================================================================== */
+.page-head .page-head-en { font-size: var(--t-sm); color: color-mix(in srgb, var(--rice) 62%, transparent); margin-top: 0.35rem; }
+
+.collage { columns: 4; column-gap: 1rem; }
+.collage-item { display: block; width: 100%; padding: 0; margin: 0 0 1rem; break-inside: avoid;
+  position: relative; border-radius: var(--r-md); overflow: hidden; background: var(--rice-deep);
+  box-shadow: var(--shadow-sm); cursor: zoom-in; line-height: 0;
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease); }
+.collage-item img { width: 100%; height: auto; display: block; transition: transform 0.5s var(--ease), filter 0.3s; }
+.collage-item::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,61,44,0.42), transparent 46%);
+  opacity: 0; transition: opacity 0.28s ease; pointer-events: none; }
+.collage-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.collage-item:hover img { transform: scale(1.05); }
+.collage-item:hover::after, .collage-item:focus-visible::after { opacity: 1; }
+.collage-zoom { position: absolute; right: 0.7rem; bottom: 0.7rem; width: 36px; height: 36px; border-radius: 50%;
+  display: grid; place-items: center; background: color-mix(in srgb, var(--rice) 92%, transparent); color: var(--betel);
+  opacity: 0; transform: translateY(6px); transition: opacity 0.28s ease, transform 0.28s var(--ease); }
+.collage-zoom svg { width: 18px; height: 18px; }
+.collage-item:hover .collage-zoom, .collage-item:focus-visible .collage-zoom { opacity: 1; transform: none; }
+.collage-empty { text-align: center; color: var(--muted); font-size: var(--t-sm); padding: 3rem 1rem; }
+.collage-empty code { background: var(--rice-deep); border-radius: 4px; padding: 0.15em 0.4em; font-size: 0.92em; }
+
+/* staggered column counts keep the collage feeling hand-placed rather than gridded */
+@media (max-width: 1080px) { .collage { columns: 3; } }
+@media (max-width: 760px)  { .collage { columns: 2; column-gap: 0.7rem; } .collage-item { margin-bottom: 0.7rem; } }
+@media (max-width: 420px)  { .collage { columns: 1; } }
+
+/* ---- lightbox ---- */
+.lightbox { position: fixed; inset: 0; z-index: 200; display: grid; grid-template-columns: auto 1fr auto;
+  align-items: center; gap: 0.5rem; padding: clamp(0.8rem, 3vw, 2rem);
+  background: rgba(14, 22, 17, 0.92); backdrop-filter: blur(6px); animation: lb-in 0.22s var(--ease); }
+.lightbox[hidden] { display: none; }
+@keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
+.lb-figure { grid-column: 2; display: grid; place-items: center; gap: 0.9rem; margin: 0; min-width: 0; }
+.lb-figure img { max-width: 100%; max-height: 78vh; width: auto; height: auto; display: block;
+  border-radius: var(--r-md); box-shadow: 0 30px 70px rgba(0,0,0,0.5); background: var(--betel); }
+.lb-figure figcaption { font-family: "Noto Sans Thai", var(--f-body); font-size: var(--t-sm);
+  color: color-mix(in srgb, var(--rice) 82%, transparent); text-align: center; max-width: 60ch; }
+.lb-close { position: absolute; top: clamp(0.8rem, 3vw, 1.6rem); right: clamp(0.8rem, 3vw, 1.6rem);
+  width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; z-index: 2;
+  color: var(--rice); background: rgba(255,255,255,0.1); transition: background 0.2s, transform 0.18s; }
+.lb-close:hover { background: rgba(255,255,255,0.22); }
+.lb-close:active { transform: scale(0.92); }
+.lb-close svg { width: 22px; height: 22px; }
+.lb-nav { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  color: var(--rice); background: rgba(255,255,255,0.1); transition: background 0.2s, transform 0.18s; }
+.lb-nav:hover { background: rgba(255,255,255,0.22); }
+.lb-nav:active { transform: scale(0.92); }
+.lb-nav svg { width: 26px; height: 26px; }
+.lb-prev { grid-column: 1; }
+.lb-next { grid-column: 3; }
+@media (max-width: 560px) {
+  .lb-nav { width: 42px; height: 42px; }
+  .lb-nav svg { width: 22px; height: 22px; }
+  .lb-figure img { max-height: 68vh; }
+}

@@ -23,12 +23,15 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.2.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.2 2.2Z"/></svg>
           <span>083-635-6354</span>
         </a>
+        <a class="nav-social" href="https://www.facebook.com/YaiyaThaifood/" target="_blank" rel="noopener" aria-label="Yaiya on Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z"/></svg>
+        </a>
       </div>
       <nav class="nav" data-nav aria-label="Primary">
         <a href="index.html" aria-current="page">Home</a>
         <a href="shop.html">Shop</a>
         <a href="product.html?id=miang-kham-set">Miang Kham</a>
-        <a href="#story">Our Story</a>
+        <a href="gallery.html">Gallery</a>
         <a href="#process">How We Make It</a>
       </nav>
       <div class="nav-actions">
@@ -98,7 +101,10 @@
       </div>
     </section>
 
-    <!-- ============ STORY ============ -->
+    <!-- ============ STORY ============
+         NOTE (2026-08-10): hidden from the homepage per request — kept here intact so it can be
+         restored later. To bring it back: remove this comment wrapper (and the closing marker
+         below), then re-add the "Our Story" links to the nav (all pages) and the footer.
     <section class="section" id="story">
       <div class="wrap split">
         <div data-reveal>
@@ -122,6 +128,7 @@
         </div>
       </div>
     </section>
+         ============ END STORY (commented out) ============ -->
 
     <!-- ============ FEATURED PRODUCTS ============ -->
     <section class="section" id="featured" style="background:var(--rice-deep)">
@@ -209,13 +216,22 @@
       </div>
     </section>
 
-    <!-- ============ TESTIMONIAL BAND ============ -->
-    <section class="section feature-band">
-      <div class="wrap center">
-        <span class="eyebrow" style="color:var(--gold-soft)">From our table to yours</span>
-        <p class="quote-big" style="margin-top:1rem">"พอได้ห่อเมี่ยงคำคำแรก ฉันก็กลับไปเป็นเด็กแปดขวบอีกครั้ง ในครัวของยายที่หาดใหญ่"</p>
-        <p class="bi-en" style="max-width:44ch;margin-inline:auto">"I folded my first miang kham and was eight years old again, in my grandmother's kitchen in Hat Yai."</p>
-        <p class="quote-author">— คุณพลอย ส., กรุงเทพฯ / Ploy S., Bangkok</p>
+    <!-- ============ CUSTOMER REVIEWS ============ -->
+    <section class="section feature-band" id="reviews">
+      <div class="wrap">
+        <div class="center" style="margin-bottom:2rem">
+          <span class="eyebrow" style="color:var(--gold-soft)">From our table to yours</span>
+          <h2 class="section-title" style="color:var(--rice)"><span class="th" style="color:var(--gold-soft)">เสียงจากลูกค้า</span>What our customers say</h2>
+          <p class="reviews-source">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z"/></svg>
+            รีวิวจริงจากลูกค้าบนเฟซบุ๊ก / Real reviews from our Facebook page
+          </p>
+        </div>
+        <div class="review-rail" id="review-rail"></div>
+        <div class="rail-dots" id="review-dots" aria-hidden="true"></div>
+        <div class="center" style="margin-top:1.8rem">
+          <a class="btn btn-gold" href="https://www.facebook.com/YaiyaThaifood/" target="_blank" rel="noopener">อ่านรีวิวทั้งหมด / Read more on Facebook <span class="arrow">→</span></a>
+        </div>
       </div>
     </section>
 
@@ -253,7 +269,7 @@
       </div>
       <div>
         <h5>Yaiya</h5>
-        <a href="#story">Our story</a>
+        <a href="gallery.html">Gallery</a>
         <a href="#process">How we make it</a>
         <a href="#anatomy">The perfect bite</a>
       </div>
@@ -273,6 +289,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/products.js"></script>
+  <script src="assets/js/reviews.js"></script>
   <script src="assets/js/cart.js"></script>
   <script src="assets/js/main.js"></script>
   <script>
@@ -302,19 +319,46 @@
         </article>`;
       }).join("");
 
-      // Featured rail: on mobile the grid becomes a horizontal snap carousel — keep the dot
-      // indicators in step with however far it's been scrolled. (Dots are CSS-hidden on desktop.)
-      (function () {
-        const dots = document.getElementById("featured-dots");
-        const cards = [...grid.children];
-        if (!dots || cards.length < 2) return;
+      // Horizontal snap rails (featured products on mobile, reviews at every width): keep the
+      // dot indicators in step with however far the rail has been scrolled.
+      function wireRail(rail, dots) {
+        const cards = [...rail.children];
+        if (!rail || !dots || cards.length < 2) return;
         dots.innerHTML = cards.map((_, i) => `<span class="rail-dot${i ? "" : " active"}"></span>`).join("");
         const dotEls = [...dots.children];
-        grid.addEventListener("scroll", () => {
-          const i = Math.round(grid.scrollLeft / (grid.scrollWidth / cards.length));
+        rail.addEventListener("scroll", () => {
+          const i = Math.round(rail.scrollLeft / (rail.scrollWidth / cards.length));
           const cur = Math.max(0, Math.min(i, cards.length - 1));
           dotEls.forEach((d, n) => d.classList.toggle("active", n === cur));
         }, { passive: true });
+      }
+      wireRail(grid, document.getElementById("featured-dots"));
+
+      // Customer reviews (data in assets/js/reviews.js — every one of them is from Facebook)
+      (function () {
+        const rail = document.getElementById("review-rail");
+        if (!rail || typeof REVIEWS === "undefined") return;
+        const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+        rail.innerHTML = REVIEWS.map((r) => {
+          const named = !!r.name;
+          const display = named ? esc(r.name) : "ไม่ระบุชื่อ / Anonymous";
+          // avatar shows the reviewer's first character, or a neutral glyph when anonymous
+          const initial = named ? esc(r.name.trim().charAt(0)) : "?";
+          return `<article class="review-card">
+            <div class="review-head">
+              <span class="review-avatar${named ? "" : " anon"}" aria-hidden="true">${initial}</span>
+              <span class="review-who">
+                <span class="review-name${named ? "" : " anon"}">${display}</span>
+                <span class="review-src">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z"/></svg>
+                  Facebook${r.date ? " · " + esc(r.date) : ""}
+                </span>
+              </span>
+            </div>
+            <p class="review-text">${esc(r.text)}</p>
+          </article>`;
+        }).join("");
+        wireRail(rail, document.getElementById("review-dots"));
       })();
 
       // Anatomy of a bite: hover an ingredient to see its Thai health benefit with English subtitle
