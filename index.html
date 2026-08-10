@@ -77,7 +77,9 @@
     </section>
 
     <!-- ============ ANATOMY OF A BITE (signature) ============ -->
-    <section class="section anatomy" id="anatomy">
+    <!-- plain .section (no .anatomy) so this sits on the default rice background, matching
+         "What we make" — otherwise it merges into the rice-deep "Loved at the table" below it -->
+    <section class="section" id="anatomy">
       <div class="wrap">
         <div class="center" style="margin-bottom:2.4rem">
           <span class="eyebrow">The signature</span>
@@ -227,7 +229,15 @@
             รีวิวจริงจากลูกค้าบนเฟซบุ๊ก / Real reviews from our Facebook page
           </p>
         </div>
-        <div class="review-rail" id="review-rail"></div>
+        <div class="rail-wrap">
+          <button class="rail-btn rail-prev" id="review-prev" type="button" aria-label="รีวิวก่อนหน้า / Previous reviews">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg>
+          </button>
+          <div class="review-rail" id="review-rail"></div>
+          <button class="rail-btn rail-next" id="review-next" type="button" aria-label="รีวิวถัดไป / Next reviews">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+          </button>
+        </div>
         <div class="rail-dots" id="review-dots" aria-hidden="true"></div>
         <div class="center" style="margin-top:1.8rem">
           <a class="btn btn-gold" href="https://www.facebook.com/YaiyaThaifood/" target="_blank" rel="noopener">อ่านรีวิวทั้งหมด / Read more on Facebook <span class="arrow">→</span></a>
@@ -321,16 +331,38 @@
 
       // Horizontal snap rails (featured products on mobile, reviews at every width): keep the
       // dot indicators in step with however far the rail has been scrolled.
-      function wireRail(rail, dots) {
-        const cards = [...rail.children];
-        if (!rail || !dots || cards.length < 2) return;
-        dots.innerHTML = cards.map((_, i) => `<span class="rail-dot${i ? "" : " active"}"></span>`).join("");
-        const dotEls = [...dots.children];
-        rail.addEventListener("scroll", () => {
-          const i = Math.round(rail.scrollLeft / (rail.scrollWidth / cards.length));
-          const cur = Math.max(0, Math.min(i, cards.length - 1));
-          dotEls.forEach((d, n) => d.classList.toggle("active", n === cur));
-        }, { passive: true });
+      function wireRail(rail, dots, prevBtn, nextBtn) {
+        const cards = rail ? [...rail.children] : [];
+        if (!rail || cards.length < 2) return;
+
+        let dotEls = [];
+        if (dots) {
+          dots.innerHTML = cards.map((_, i) => `<span class="rail-dot${i ? "" : " active"}"></span>`).join("");
+          dotEls = [...dots.children];
+        }
+
+        // Arrows step by exactly one card (card width + the flex gap between them)
+        const step = () => {
+          const gap = parseFloat(getComputedStyle(rail).columnGap || getComputedStyle(rail).gap) || 0;
+          return cards[0].getBoundingClientRect().width + gap;
+        };
+        const sync = () => {
+          if (dotEls.length) {
+            const i = Math.round(rail.scrollLeft / (rail.scrollWidth / cards.length));
+            const cur = Math.max(0, Math.min(i, cards.length - 1));
+            dotEls.forEach((d, n) => d.classList.toggle("active", n === cur));
+          }
+          // grey out an arrow once there's nothing further to scroll that way (1px slack for
+          // sub-pixel scroll positions, which otherwise leave "next" enabled at the very end)
+          if (prevBtn) prevBtn.disabled = rail.scrollLeft <= 1;
+          if (nextBtn) nextBtn.disabled = rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 1;
+        };
+
+        if (prevBtn) prevBtn.addEventListener("click", () => rail.scrollBy({ left: -step(), behavior: "smooth" }));
+        if (nextBtn) nextBtn.addEventListener("click", () => rail.scrollBy({ left: step(), behavior: "smooth" }));
+        rail.addEventListener("scroll", sync, { passive: true });
+        window.addEventListener("resize", sync);
+        sync();
       }
       wireRail(grid, document.getElementById("featured-dots"));
 
@@ -358,7 +390,8 @@
             <p class="review-text">${esc(r.text)}</p>
           </article>`;
         }).join("");
-        wireRail(rail, document.getElementById("review-dots"));
+        wireRail(rail, document.getElementById("review-dots"),
+          document.getElementById("review-prev"), document.getElementById("review-next"));
       })();
 
       // Anatomy of a bite: hover an ingredient to see its Thai health benefit with English subtitle

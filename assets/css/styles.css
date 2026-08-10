@@ -332,12 +332,30 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
   font-size: var(--t-sm); color: color-mix(in srgb, var(--rice) 72%, transparent); }
 .reviews-source svg { width: 18px; height: 18px; color: var(--gold-soft); flex: none; }
 
+/* Arrow controls flanking a rail. The wrapper is the positioning context; the buttons sit
+   just outside the rail on wide screens and tuck over its edges once space runs out. */
+.rail-wrap { position: relative; }
+.rail-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+  color: var(--betel); background: var(--rice-card); border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  box-shadow: var(--shadow-md); transition: background 0.2s, transform 0.18s, opacity 0.2s, border-color 0.2s; }
+.rail-btn svg { width: 22px; height: 22px; }
+.rail-btn:hover { background: var(--gold-soft); border-color: var(--gold); }
+.rail-btn:active { transform: translateY(-50%) scale(0.92); }
+.rail-btn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
+.rail-btn:disabled:hover { background: var(--rice-card); }
+.rail-prev { left: -22px; }
+.rail-next { right: -22px; }
+@media (max-width: 1240px) { .rail-prev { left: 4px; } .rail-next { right: 4px; } }
+
 /* Horizontal snap rail of review cards — scrollable at every width, since there are many */
 .review-rail { display: flex; gap: 1.1rem; align-items: stretch;
   overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
   scrollbar-width: none; padding: 0.3rem 0 0.6rem; }
 .review-rail::-webkit-scrollbar { display: none; }
-.review-card { flex: 0 0 min(88%, 360px); scroll-snap-align: center; display: flex; flex-direction: column;
+/* snap to `start`, not `center`: with several cards visible at once, centre-snapping makes the
+   first cards share one snap point, so the arrows would skip past them */
+.review-card { flex: 0 0 min(88%, 360px); scroll-snap-align: start; display: flex; flex-direction: column;
   background: var(--rice-card); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
   border-radius: var(--r-lg); padding: 1.3rem 1.4rem; box-shadow: var(--shadow-md); }
 .review-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.9rem;
@@ -515,7 +533,8 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
   /* cards parked off to the right would otherwise sit at opacity:0 until swiped into view */
   .product-grid.rail [data-reveal] { opacity: 1; transform: none; }
   .rail-dots { display: flex; }
-  .review-rail { margin-inline: -1.2rem; padding-inline: 1.2rem; }
+  /* scroll-padding keeps `snap-align: start` lining cards up with the gutter, not the bleed edge */
+  .review-rail { margin-inline: -1.2rem; padding-inline: 1.2rem; scroll-padding-inline: 1.2rem; }
   .cart-row { grid-template-columns: 72px 1fr; }
   .cart-row .row-end { grid-column: 1 / -1; flex-direction: row; justify-items: stretch; }
 }
