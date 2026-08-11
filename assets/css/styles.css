@@ -312,8 +312,8 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 /* ===================== process ===================== */
 .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4rem; }
 .process-step { text-align: center; padding: 1.4rem 1rem; }
-.process-step .ico { width: 64px; height: 64px; margin: 0 auto 1rem; border-radius: 50%; background: var(--rice-deep); display: grid; place-items: center; color: var(--betel); border: 1px solid var(--line); }
-.process-step .ico svg { width: 30px; height: 30px; }
+.process-step .ico { width: 92px; height: 92px; margin: 0 auto 1.1rem; border-radius: 50%; background: var(--rice-deep); display: grid; place-items: center; color: var(--betel); border: 1px solid var(--line); }
+.process-step .ico svg { width: 48px; height: 48px; }
 .process-step h4 { color: var(--betel); margin-bottom: 0.4rem; font-size: var(--t-lg); font-family: "Noto Sans Thai", var(--f-body); font-weight: 600; }
 .process-step h4 .step-en { display: block; font-family: var(--f-display); font-size: 0.86em; font-weight: 600; color: var(--palm-deep); letter-spacing: 0.04em; margin-top: 2px; }
 .process-step p { font-size: var(--t-sm); color: var(--muted); }
@@ -484,9 +484,12 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; line-height: 1
 .footer-bottom { position: relative; margin-top: 2.4rem; padding-top: 1.4rem; border-top: 1px solid rgba(247, 241, 225, 0.12); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.6rem; font-size: var(--t-xs); color: color-mix(in srgb, var(--rice) 55%, transparent); }
 
 /* ===================== toast ===================== */
-.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140%); background: var(--betel); color: var(--rice); padding: 0.9rem 1.4rem; border-radius: var(--r-pill); box-shadow: var(--shadow-lg); font-size: var(--t-sm); font-weight: 600; z-index: 200; transition: transform 0.4s var(--ease); display: flex; align-items: center; gap: 0.6rem; }
-.toast::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold-soft); }
-.toast.show { transform: translate(-50%, 0); }
+/* Parked off-screen by its own height PLUS the 24px bottom offset — the old `140%` was
+   relative to the toast's height alone (~37px), which left ~9px of the green pill peeking
+   above the bottom edge on every page. opacity/visibility make it unmissable-proof. */
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, calc(100% + 24px)); background: var(--betel); color: var(--rice); padding: 0.9rem 1.4rem; border-radius: var(--r-pill); box-shadow: var(--shadow-lg); font-size: var(--t-sm); font-weight: 600; z-index: 200; opacity: 0; visibility: hidden; pointer-events: none; transition: transform 0.4s var(--ease), opacity 0.3s ease, visibility 0.3s; display: flex; align-items: center; gap: 0.6rem; }
+.toast::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold-soft); flex: none; }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
 
 /* ===================== reveal animation ===================== */
 [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
